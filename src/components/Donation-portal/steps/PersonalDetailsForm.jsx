@@ -38,7 +38,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
 
 
-  const handleChange = (e) => {
+  const handleChange = (e) => {      
     const { id, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -47,7 +47,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   };
 
   const handlePaymentSelection = (event) => {
-    console.log("Payment method selected:", event.target.id);
+    const selectedPayment = event.target.id;
+    console.log("Payment method selected:", selectedPayment);
+    setFormData((prev) => ({
+      ...prev,
+      paywith: selectedPayment,
+    }));
   };
 
   const generateSessionId = () => {
@@ -100,8 +105,10 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   // React Query Mutation to update transaction
   const updateTransaction = async (refId) => {
     const sessionId = generateSessionId();
-
-    // Create a new FormData object
+    const giftaid = localStorage.getItem("giftaidclaim");
+      const { value } = JSON.parse(giftaid);
+      const contactPreferences = localStorage.getItem("contactPreferences");
+      const {email, phone, post, sms} = JSON.parse(contactPreferences);
     const Form_Data = new FormData();
 
     // Append the form fields to FormData
@@ -109,7 +116,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     Form_Data.append("session_id", sessionId);
     Form_Data.append("reference_no", refId);
     Form_Data.append("guest_details", JSON.stringify(formData));
-
+    Form_Data.append("payment_method", formData.paywith);
+    Form_Data.append("claim_donation", value);
+    Form_Data.append("tele_calling", phone);
+    Form_Data.append("send_email", email);
+    Form_Data.append("send_mail", post);
+    Form_Data.append("send_text", sms);
     try {
       const response = await axios.post(
         `${apiUrl}payment/transaction`,
@@ -150,7 +162,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const updatedFormData = {
       ...formData,
       address1: document.getElementById("address-1").value,
@@ -163,6 +174,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     };
 
     setFormData(updatedFormData);
+    console.log("Form Data:", updatedFormData);
 
     try {
       const refId = await updateReferenceId();
