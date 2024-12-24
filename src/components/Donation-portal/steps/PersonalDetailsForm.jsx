@@ -4,6 +4,7 @@ import axios from "axios";
 import PAFModal from "./PAF";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
+import PaymentForm from "../../Dashboard/PaymentGateway";
 import {
   Elements,
   CardElement,
@@ -11,254 +12,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
-import Modal from 'react-modal';
 
-const PaymentModal = ({ isOpen, onRequestClose, onPaymentSuccess, setCurrentStep, setIsSuccess }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-
-  
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!stripe || !elements) {
-      return;
-    }
-    setLoading(true);
-    setError(null);
-
-    const cardElement = elements.getElement(CardElement);
-    const { error: stripeError, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card: cardElement,
-    });
-
-    if (stripeError) {
-      setError(stripeError.message);
-      setLoading(false);
-      return;
-    }
-
-    // Call your server to create the payment intent and confirm the payment
-    const response = await fetch(
-      "https://node-donation-portal.onrender.com/create-payment-intent",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 1000 }), // Example amount
-      }
-    );
-
-    const { clientSecret } = await response.json();
-    const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(
-      clientSecret,
-      {
-        payment_method: paymentMethod.id,
-      }
-    );
-
-    if (confirmError) {
-      setError(confirmError.message);
-      setLoading(false);
-      return;
-    }
-
-    if (paymentIntent.status === "succeeded") {
-      onPaymentSuccess(paymentIntent);
-      setLoading(false);
-      setIsSuccess(true);
-      setCurrentStep(5);
-      onRequestClose();
-    } else {
-      setCurrentStep(5);
-      setIsSuccess(false);
-      onRequestClose();
-    }
-  };
-
-  const modalStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      transform: 'translate(-50%, -50%)',
-      padding: '0',
-      border: 'none',
-      borderRadius: '8px',
-      maxWidth: '500px',
-      width: '90%',
-      maxHeight: '90vh',
-      overflow: 'auto'
-    },
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.75)'
-    }
-  };
-
-  return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      style={modalStyles}
-      contentLabel="Payment Modal"
-    >
-      <div className="payment-modal">
-        <style>
-          {`
-            .payment-modal {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            }
-
-            .header {
-              background-color: #1a1a1a;
-              color: white;
-              padding: 20px;
-            }
-
-            .header-amount {
-              font-size: 32px;
-              font-weight: bold;
-              margin: 10px 0;
-            }
-
-            .header-country {
-              color: #888;
-              font-size: 14px;
-            }
-
-            .payment-form {
-              padding: 20px;
-            }
-
-            .form-group {
-              margin-bottom: 20px;
-            }
-
-            .form-label {
-              display: block;
-              margin-bottom: 8px;
-              color: #333;
-              font-size: 14px;
-            }
-
-            .form-input {
-              width: 100%;
-              padding: 12px;
-              border: 1px solid #ddd;
-              border-radius: 4px;
-              font-size: 16px;
-            }
-
-            .card-element {
-              border: 1px solid #ddd;
-              padding: 12px;
-              border-radius: 4px;
-              background: white;
-            }
-
-            .error-message {
-              color: #dc2626;
-              font-size: 14px;
-              margin-top: 8px;
-            }
-
-            .pay-button {
-              width: 100%;
-              padding: 14px;
-              background: #000;
-              color: white;
-              border: none;
-              border-radius: 4px;
-              font-size: 16px;
-              cursor: pointer;
-              margin-top: 20px;
-            }
-
-            .pay-button:disabled {
-              background: #666;
-              cursor: not-allowed;
-            }
-
-            .footer {
-              text-align: center;
-              padding: 20px;
-              color: #666;
-              font-size: 14px;
-              border-top: 1px solid #eee;
-            }
-
-            @media (max-width: 600px) {
-              .header-amount {
-                font-size: 28px;
-              }
-              
-              .payment-form {
-                padding: 15px;
-              }
-            }
-          `}
-        </style>
-
-        <div className="header">
-          <div>Food Packs</div>
-          <div className="header-amount">£100.00</div>
-          <div className="header-country">For Country: Pakistan</div>
-        </div>
-
-        <div className="payment-form">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label className="form-label">Email</label>
-              <input
-                type="email"
-                className="form-input"
-                placeholder="Email"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Card Details</label>
-              <CardElement
-                className="card-element"
-                options={{
-                  style: {
-                    base: {
-                      fontSize: '16px',
-                      color: '#424770',
-                      '::placeholder': {
-                        color: '#aab7c4',
-                      },
-                    },
-                    invalid: {
-                      color: '#9e2146',
-                    },
-                  },
-                }}
-              />
-              {error && <div className="error-message">{error}</div>}
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading || !stripe}
-              className="pay-button"
-            >
-              {loading ? "Processing..." : "Pay"}
-            </button>
-          </form>
-        </div>
-
-        <div className="footer">
-          <span>Powered by stripe</span>
-        </div>
-      </div>
-    </Modal>
-  );
-};
 
 const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const stripePromise = loadStripe(
@@ -279,25 +33,10 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   });
   const [addCity, setAddCity] = useState(false);
   const [NewCity, setNewCity] = useState("");
-   const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [paymentStatus, setPaymentStatus] = useState('');
-  
-    const handlePaymentSuccess = (paymentIntent) => {
-      setPaymentStatus('Payment Successful!');
-      console.log('Payment Intent:', paymentIntent);
-    };
-  
-    const openPaymentModal = () => {
-      setModalIsOpen(true);
-    };
-  
-    const closePaymentModal = () => {
-      setModalIsOpen(false);
-    };
-  
-
+  const [isPaymentGatewayOpen, setIsPaymentGatewayOpen] = useState(false);
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
+
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -418,7 +157,8 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       address2: document.getElementById("address-2").value,
       postcode: document.getElementById("postCode").value,
       city: document.getElementById("city")?.value || NewCity,
-      city_id: "22",
+      city_id: 22,
+      city_name: "london",
       country: String(document.getElementById("countries").value),
     };
 
@@ -431,7 +171,8 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
       await updateTransaction(refId);
       // await buyFunction();
-      openPaymentModal()
+      // openPaymentModal();
+      setIsPaymentGatewayOpen(true);
       // setCurrentStep(5)
     } catch (err) {
       console.error("Error during form submission:", err);
@@ -442,13 +183,14 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     <>
       <Elements stripe={stripePromise}>
         {/* <button onClick={updateReferenceId}>Click Me</button> */}
-        <PaymentModal
-        setCurrentStep={setCurrentStep}
-        isOpen={modalIsOpen}
-        onRequestClose={closePaymentModal}
-        onPaymentSuccess={handlePaymentSuccess}
-        setIsSuccess={setIsSuccess}
-      />
+        {/* <PaymentModal
+          setCurrentStep={setCurrentStep}
+          isOpen={modalIsOpen}
+          onRequestClose={closePaymentModal}
+          onPaymentSuccess={handlePaymentSuccess}
+          setIsSuccess={setIsSuccess}
+        /> */}
+        <PaymentForm setCurrentStep={setCurrentStep} isPaymentGatewayOpen={isPaymentGatewayOpen} setIsPaymentGatewayOpen={setIsPaymentGatewayOpen}/>
         <form
           onSubmit={handleSubmit}
           className="flex justify-center items-center"
