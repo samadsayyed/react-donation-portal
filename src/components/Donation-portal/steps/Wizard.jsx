@@ -6,10 +6,14 @@ import PersonalDetailsForm from "./PersonalDetailsForm";
 import Success from "./Success";
 import Failed from "./Failed";
 import "../../../index.css";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 const Wizard = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSuccess, setIsSuccess] = useState(false);
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
   const steps = [
     {
       number: 1,
@@ -84,6 +88,7 @@ const Wizard = () => {
   };
 
   return (
+    <Elements stripe={stripePromise}>
     <>
       <div className="w-full py-20 max-w-3xl mx-auto">
         <div className="relative mb-12">
@@ -147,15 +152,16 @@ const Wizard = () => {
                 : "bg-[#02343F] text-white hover:bg-[#02343fc5]"
             }`}
           >
+            
             {currentStep === steps.length
               ? "Complete"
-              : currentStep === steps.length - 1
-              ? "Proceed To Payment"
-              : "Next"}
+              :  "Next"}
           </button>
         </div>
       </div>
     </>
+    </Elements>
+
   );
 };
 
