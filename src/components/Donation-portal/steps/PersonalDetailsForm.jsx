@@ -30,7 +30,7 @@ const PaymentModal = ({ isOpen, onRequestClose, onPaymentSuccess, setCurrentStep
     setError(null);
 
     const cardElement = elements.getElement(CardElement);
-    const { error: stripeError, paymentMethod } = await stripe.createPaymentMethod({
+    const { error: stripeError, StripePaymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card: cardElement,
     });
@@ -41,7 +41,6 @@ const PaymentModal = ({ isOpen, onRequestClose, onPaymentSuccess, setCurrentStep
       return;
     }
 
-    // Call your server to create the payment intent and confirm the payment
     const response = await fetch(
       "https://node-donation-portal.onrender.com/create-payment-intent",
       {
@@ -55,7 +54,7 @@ const PaymentModal = ({ isOpen, onRequestClose, onPaymentSuccess, setCurrentStep
     const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(
       clientSecret,
       {
-        payment_method: paymentMethod.id,
+        payment_method: StripePaymentMethod.id,
       }
     );
 
@@ -299,7 +298,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
 
-  const handleChange = (e) => {
+  const handleChange = (e) => {      
     const { id, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -308,7 +307,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   };
 
   const handlePaymentSelection = (event) => {
-    console.log("Payment method selected:", event.target.id);
+    const selectedPayment = event.target.id;
+    console.log("Payment method selected:", selectedPayment);
+    setFormData((prev) => ({
+      ...prev,
+      paywith: selectedPayment,
+    }));
   };
 
   const generateSessionId = () => {
@@ -361,8 +365,10 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   // React Query Mutation to update transaction
   const updateTransaction = async (refId) => {
     const sessionId = generateSessionId();
-
-    // Create a new FormData object
+    const giftaid = localStorage.getItem("giftaidclaim");
+      const { value } = JSON.parse(giftaid);
+      const contactPreferences = localStorage.getItem("contactPreferences");
+      const {email, phone, post, sms} = JSON.parse(contactPreferences);
     const Form_Data = new FormData();
 
     // Append the form fields to FormData
@@ -370,7 +376,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     Form_Data.append("session_id", sessionId);
     Form_Data.append("reference_no", refId);
     Form_Data.append("guest_details", JSON.stringify(formData));
-
+    Form_Data.append("payment_method", formData.paywith);
+    Form_Data.append("claim_donation", value);
+    Form_Data.append("tele_calling", phone);
+    Form_Data.append("send_email", email);
+    Form_Data.append("send_mail", post);
+    Form_Data.append("send_text", sms);
     try {
       const response = await axios.post(
         `${apiUrl}payment/transaction`,
@@ -411,18 +422,18 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const updatedFormData = {
       ...formData,
       address1: document.getElementById("address-1").value,
       address2: document.getElementById("address-2").value,
       postcode: document.getElementById("postCode").value,
       city: document.getElementById("city")?.value || NewCity,
-      city_id: "22",
+      city_id: "1",
       country: String(document.getElementById("countries").value),
     };
 
     setFormData(updatedFormData);
+    console.log("Form Data:", updatedFormData);
 
     try {
       const refId = await updateReferenceId();
