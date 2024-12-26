@@ -136,7 +136,7 @@ const DonationCart = () => {
       if (data.success === false) {
         alert("Plaque names updated already");
       } else {
-        alert("Plaque names updated successfully");
+        console.log("Plaque names updated successfully");
       }
 
       if (!response.ok) {
@@ -149,15 +149,42 @@ const DonationCart = () => {
     }
   };
   const updateParticipantNames = async (event) => {
-    const cartId = event.target.getAttribute("data-cart-id");
-    const plaqueInputs = document.querySelectorAll(
-      `input[data-cart-id="${cartId}"]#plaque-name`
-    );
-
-    const plaqueNames = Array.from(plaqueInputs)
-      .map((input) => input.value.trim())
-      .filter((name) => name !== "");
-    pushParticipantNames(cartId, plaqueNames.join(", "));
+    // Get all cart IDs from the cartItems state
+    const cartData = cartItems.map(item => {
+      // For each cart item, find all associated plaque name inputs
+      const plaqueInputs = document.querySelectorAll(
+        `input[data-cart-id="${item.cart_id}"]#plaque-name`
+      );
+  
+      // Get all plaque names for this cart item and join with comma
+      const plaqueNames = Array.from(plaqueInputs)
+        .map((input) => input.value.trim())
+        .filter((name) => name !== "")
+        .join(", ");
+  
+      // Return object in required format
+      return {
+        cart_id: item.cart_id,
+        participant_name: plaqueNames
+      };
+    });
+  
+    // Log the formatted data
+    console.log("Cart Data to be submitted:", cartData);
+  
+    // Push participant names for each cart item
+    try {
+      for (const item of cartData) {
+        if (!item.participant_name) {
+          alert(`Please enter plaque names for all items!`);
+          return;
+        }
+        await pushParticipantNames(item.cart_id, item.participant_name);
+      }
+    } catch (err) {
+      console.error("Error updating participant names:", err);
+      setError(err.message);
+    }
   };
 
   useEffect(() => {
@@ -242,16 +269,7 @@ const DonationCart = () => {
                     </button>
                   </div>
                 ))}
-                <div className="flex justify-center">
-                  <button
-                    onClick={updateParticipantNames}
-                    data-cart-id={item.cart_id}
-                    data-cart-quantity={item.quantity}
-                    className="bg-teal-600 text-white px-4 py-2 rounded"
-                  >
-                    Submit Plaque Names
-                  </button>
-                </div>
+                
               </li>
             </>
           ))}
@@ -272,22 +290,20 @@ const DonationCart = () => {
               </span>
             </h2>
           </div>
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-evenly mt-6">
             <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded">
               <a href="/donation-portal">Add Another Program</a>
             </button>
-            {/* <button
+            <button
               onClick={updateParticipantNames}
               data-cart-ids={JSON.stringify(
                 cartItems.map((item) => item.cart_id)
               )}
-              data-cart-quantities={JSON.stringify(
-                cartItems.map((item) => item.quantity)
-              )}
+        
               className="bg-teal-600 text-white px-4 py-2 rounded"
             >
               Submit Plaque Names
-            </button> */}
+            </button>
           </div>
         </ul>
       ) : (

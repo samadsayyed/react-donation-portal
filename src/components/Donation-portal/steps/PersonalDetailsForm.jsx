@@ -70,7 +70,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     const expiryTime = timestamp + 24 * 60 * 60 * 1000;
 
     localStorage.setItem(
-      "sessionIdData",
+      "sessionIdDatatr",
       JSON.stringify({ sessionId: newSessionId, expiry: expiryTime })
     );
 
@@ -104,46 +104,78 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
   // React Query Mutation to update transaction
   const updateTransaction = async (refId) => {
+    // Generate session ID
     const sessionId = generateSessionId();
-    const giftaid = localStorage.getItem("giftaidclaim");
-      const { value } = JSON.parse(giftaid);
-      const contactPreferences = localStorage.getItem("contactPreferences");
-      const {email, phone, post, sms} = JSON.parse(contactPreferences);
-    const Form_Data = new FormData();
-
-    // Append the form fields to FormData
-    Form_Data.append("auth", 0);
-    Form_Data.append("session_id", sessionId);
-    Form_Data.append("reference_no", refId);
-    Form_Data.append("guest_details", JSON.stringify(formData));
-    Form_Data.append("payment_method", formData.paywith);
-    Form_Data.append("claim_donation", value);
-    Form_Data.append("tele_calling", phone);
-    Form_Data.append("send_email", email);
-    Form_Data.append("send_mail", post);
-    Form_Data.append("send_text", sms);
+    
+    // Initialize default values
+    let giftaidValue = 'N';
+    let contactPrefs = {
+      email: 'N',
+      phone: 'N',
+      post: 'N',
+      sms: 'N'
+    };
+  
+    // Get giftaid information from localStorage
+    try {
+      const giftaidData = localStorage.getItem('giftaidclaim');
+      if (giftaidData) {
+        const { value } = JSON.parse(giftaidData);
+        giftaidValue = value || 'N';
+      }
+    } catch (error) {
+      console.error('Error parsing giftaid data:', error);
+    }
+  
+    // Get contact preferences from localStorage
+    try {
+      const contactPreferencesData = localStorage.getItem('contactPreferences');
+      if (contactPreferencesData) {
+        const parsed = JSON.parse(contactPreferencesData);
+        contactPrefs = {
+          email: parsed.email || 'N',
+          phone: parsed.phone || 'N',
+          post: parsed.post || 'N',
+          sms: parsed.sms || 'N'
+        };
+      }
+    } catch (error) {
+      console.error('Error parsing contact preferences:', error);
+    }
+  
+    // Create and populate FormData
+    const form_Data = new FormData();
+    form_Data.append('auth', 0);
+    form_Data.append('session_id', sessionId);
+    form_Data.append('reference_no', refId);
+    form_Data.append('guest_details', JSON.stringify(formData)); 
+    form_Data.append('payment_method', formData.paywith);
+    form_Data.append('claim_donation', giftaidValue);
+    form_Data.append('tele_calling', contactPrefs.phone);
+    form_Data.append('send_email', contactPrefs.email);
+    form_Data.append('send_mail', contactPrefs.post);
+    form_Data.append('send_text', contactPrefs.sms);
+  
     try {
       const response = await axios.post(
         `${apiUrl}payment/transaction`,
-        Form_Data,
+        form_Data,
         {
           headers: {
             Authorization: `Bearer ${apiToken}`,
-            // Set Content-Type to multipart/form-data when using FormData
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
         }
       );
-
-      console.log("Transaction created successfully:", response.data);
-      if (response.data.success) {
-        setIsSuccess(true);
-      } else {
-        setIsSuccess(false);
-      }
-    } catch (err) {
-      console.error("Error in creating transaction:", err.message);
-      throw err;
+  
+      console.log('Transaction created successfully:', response.data);
+      setIsSuccess(response.data.success);
+      return response.data;
+      
+    } catch (error) {
+      console.error('Error in creating transaction:', error.message);
+      setIsSuccess(false);
+      throw error;
     }
   };
 

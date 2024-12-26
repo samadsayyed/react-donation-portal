@@ -126,14 +126,14 @@ const PaymentForm = ({
         //   }
         // );
         // console.log(donationResponse,"donationResponse");
-
-        if (donationResponse.data.success) {
-          onPaymentSuccess(paymentIntent);
-          setIsSuccess(true);
-          setCurrentStep(5);
-        } else {
-          setIsSuccess(false);
-        }
+        onPaymentSuccess(paymentIntent);
+        setIsSuccess(true);
+        setCurrentStep(5);
+        // if (donationResponse.data.success) {
+          
+        // } else {
+        //   setIsSuccess(false);
+        // }
       } else {
         setError("Payment failed. Please try again.");
         setIsSuccess(false);
