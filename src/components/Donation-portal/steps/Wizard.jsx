@@ -99,7 +99,7 @@ const Wizard = () => {
 
           <div className="relative flex justify-between">
             {steps.map((step) => (
-              <div key={step.number} className="flex flex-col items-center">
+              <div key={step.number} onClick={() => setCurrentStep(step.number)} className="flex flex-col items-center">
                 <div
                   className={`step-circle w-12 h-12 rounded-full flex items-center justify-center font-semibold text-sm relative z-10 transition-colors duration-300 ${
                     step.number === currentStep
