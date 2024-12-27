@@ -43,67 +43,8 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
 
-  // PayPal handlers
-  const handlePayPalOrder = async () => {
-    try {
-      const response = await axios.post("http://localhost:3001/create-paypal-order", {
-        amount: 1000, // Replace with actual amount from your form
-      });
-      return response.data.id;
-    } catch (error) {
-      console.error("Error creating PayPal order:", error);
-      throw error;
-    }
-  };
 
-  useEffect(() => {
-    const loadPayPalScript = () => {
-      const script = document.createElement("script");
-      script.src = `https://www.paypal.com/sdk/js?client-id=Adm3RyFPf-3U4qNUuTD8d1G2grwiwfCfDkh04R2AKjC_yjYbbvWtiBSKnR-P2tAAGS510XkopYKa-E3p&currency=GBP&components=buttons`;
-      script.async = true;
-      script.onload = () => setPaypalLoaded(true);
-      document.body.appendChild(script);
-      return script;
-    };
-
-    const paypalScript = loadPayPalScript();
-    return () => {
-      if (paypalScript) {
-        document.body.removeChild(paypalScript);
-      }
-    };
-  }, []);
-
-
-
-  const handlePayPalCapture = async (data, actions) => {
-    try {
-      const response = await axios.post("http://localhost:3001/capture-paypal-order", {
-        orderId: data.orderID,
-      });
-      if (response.data.status === "COMPLETED") {
-        setIsSuccess(true);
-        setCurrentStep(5);
-      }
-    } catch (error) {
-      console.error("Error capturing PayPal order:", error);
-      setIsSuccess(false);
-    }
-  };
-
-  // Stripe handler
-  const buyFunction = async () => {
-    try {
-      const response = await axios.post("http://localhost:3000/payment", {});
-      if (response.status === 200) {
-        window.location.href = response.data.url;
-      }
-    } catch (error) {
-      console.error("Error processing Stripe payment:", error);
-    }
-  };
-
-  const handleChange = (e) => {      
+  const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -134,7 +75,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     const expiryTime = timestamp + 24 * 60 * 60 * 1000;
 
     localStorage.setItem(
-      "sessionIdData",
+      "sessionIdDatatr",
       JSON.stringify({ sessionId: newSessionId, expiry: expiryTime })
     );
 
@@ -165,14 +106,16 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     }
   };
 
+  // React Query Mutation to update transaction
   const updateTransaction = async (refId) => {
     const sessionId = generateSessionId();
     const giftaid = localStorage.getItem("giftaidclaim");
-    const { value } = JSON.parse(giftaid);
-    const contactPreferences = localStorage.getItem("contactPreferences");
-    const {email, phone, post, sms} = JSON.parse(contactPreferences);
+      const { value } = JSON.parse(giftaid);
+      const contactPreferences = localStorage.getItem("contactPreferences");
+      const {email, phone, post, sms} = JSON.parse(contactPreferences);
     const Form_Data = new FormData();
 
+    // Append the form fields to FormData
     Form_Data.append("auth", 0);
     Form_Data.append("session_id", sessionId);
     Form_Data.append("reference_no", refId);
@@ -183,11 +126,10 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     Form_Data.append("send_email", email);
     Form_Data.append("send_mail", post);
     Form_Data.append("send_text", sms);
-
     try {
       const response = await axios.post(
         `${apiUrl}payment/transaction`,
-        Form_Data,
+        form_Data,
         {
           headers: {
             Authorization: `Bearer ${apiToken}`,
@@ -196,6 +138,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
         }
       );
 
+      console.log("Transaction created successfully:", response.data);
       if (response.data.success) {
         setIsSuccess(true);
       } else {
@@ -215,8 +158,8 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       address2: document.getElementById("address-2").value,
       postcode: document.getElementById("postCode").value,
       city: document.getElementById("city")?.value || NewCity,
-      city_id: 22,
-      city_name: "london",
+      city_id: "1",
+      city_name: document.getElementById("city")?.value || NewCity,
       country: String(document.getElementById("countries").value),
     };
 
@@ -224,21 +167,14 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
     try {
       const refId = await updateReferenceId();
+
+      console.log(refId, "refId");
+
       await updateTransaction(refId);
-      
-      switch(formData.paywith) {
-        case 'paypal':
-          // PayPal flow will be handled by PayPal buttons
-          return;
-        case 'stripe':
-          setIsPaymentGatewayOpen(true);
-          break;
-        case 'worldpay':
-          // Add WorldPay specific logic here
-          break;
-        default:
-          console.error("Invalid payment method selected");
-      }
+      // await buyFunction();
+      // openPaymentModal();
+      setIsPaymentGatewayOpen(true);
+      // setCurrentStep(5)
     } catch (err) {
       console.error("Error during form submission:", err);
     }
@@ -250,12 +186,19 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   return (
    
       <Elements stripe={stripePromise}>
-        <PaymentForm 
-          setCurrentStep={setCurrentStep} 
-          isPaymentGatewayOpen={isPaymentGatewayOpen} 
-          setIsPaymentGatewayOpen={setIsPaymentGatewayOpen}
-        />
-        <form onSubmit={handleSubmit} className="flex justify-center items-center">
+        {/* <button onClick={updateReferenceId}>Click Me</button> */}
+        {/* <PaymentModal
+          setCurrentStep={setCurrentStep}
+          isOpen={modalIsOpen}
+          onRequestClose={closePaymentModal}
+          onPaymentSuccess={handlePaymentSuccess}
+          setIsSuccess={setIsSuccess}
+        /> */}
+        <PaymentForm setCurrentStep={setCurrentStep} isPaymentGatewayOpen={isPaymentGatewayOpen} setIsPaymentGatewayOpen={setIsPaymentGatewayOpen}/>
+        <form
+          onSubmit={handleSubmit}
+          className="flex justify-center items-center"
+        >
           <div className="rounded-lg md:p-8 px-2 w-full max-w-3xl mx-auto">
             <h2 className="text-2xl font-bold mb-6 text-center text-[#02343F]">
               Enter Your Personal Details

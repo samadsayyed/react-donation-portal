@@ -17,7 +17,7 @@ const PaymentForm = ({
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log(cartItems);
+  // console.log(cartItems);
 
   const generateSessionId = () => {
     const existingSessionData = localStorage.getItem("sessionIdData");
@@ -48,7 +48,6 @@ const PaymentForm = ({
 
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
-  console.log(apiUrl);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -131,14 +130,14 @@ const PaymentForm = ({
         //   }
         // );
         // console.log(donationResponse,"donationResponse");
-
-        if (donationResponse.data.success) {
-          onPaymentSuccess(paymentIntent);
-          setIsSuccess(true);
-          setCurrentStep(5);
-        } else {
-          setIsSuccess(false);
-        }
+        onPaymentSuccess(paymentIntent);
+        setIsSuccess(true);
+        setCurrentStep(5);
+        // if (donationResponse.data.success) {
+          
+        // } else {
+        //   setIsSuccess(false);
+        // }
       } else {
         setError("Payment failed. Please try again.");
         setIsSuccess(false);
@@ -176,7 +175,6 @@ const PaymentForm = ({
       }
 
       const data = await response.json();
-      console.log(data, "data");
 
       setCartItems(data.cart || []);
     } catch (err) {
@@ -187,7 +185,7 @@ const PaymentForm = ({
   };
 
   useEffect(() => {
-    console.log("PaymentForm mounted");
+    // console.log("PaymentForm mounted");
 
     fetchCart();
   }, []);
