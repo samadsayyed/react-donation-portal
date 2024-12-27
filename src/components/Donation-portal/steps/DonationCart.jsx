@@ -170,7 +170,7 @@ const DonationCart = () => {
     });
   
     // Log the formatted data
-    console.log("Cart Data to be submitted:", cartData);
+    // console.log("Cart Data to be submitted:", cartData);
   
     // Push participant names for each cart item
     try {

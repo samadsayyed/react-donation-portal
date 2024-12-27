@@ -12,8 +12,6 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
-
-
 const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const stripePromise = loadStripe(
     "pk_test_51QZ5TIP6D9LHv1Cj1DhRgOUqhSNlcoh8JOOYU77zkfmtX2g6LFKzNYkAu7j8H9qYCeHnIBgnpqfTWbb5p2WXdTsB00Yl6A05vL"
@@ -37,8 +35,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
 
-
-  const handleChange = (e) => {      
+  const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -103,59 +100,58 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   };
 
   // React Query Mutation to update transaction
-  const updateTransaction = async (refId) => {
+  const updateTransaction = async (refId ,updatedFormData) => {
     // Generate session ID
     const sessionId = generateSessionId();
-    
+
     // Initialize default values
-    let giftaidValue = 'N';
+    let giftaidValue = "N";
     let contactPrefs = {
-      email: 'N',
-      phone: 'N',
-      post: 'N',
-      sms: 'N'
+      email: "N",
+      phone: "N",
+      post: "N",
+      sms: "N",
     };
-  
+
     // Get giftaid information from localStorage
     try {
-      const giftaidData = localStorage.getItem('giftaidclaim');
+      const giftaidData = localStorage.getItem("giftaidclaim");
       if (giftaidData) {
         const { value } = JSON.parse(giftaidData);
-        giftaidValue = value || 'N';
+        giftaidValue = value || "N";
       }
     } catch (error) {
-      console.error('Error parsing giftaid data:', error);
+      console.error("Error parsing giftaid data:", error);
     }
-  
+
     // Get contact preferences from localStorage
     try {
-      const contactPreferencesData = localStorage.getItem('contactPreferences');
+      const contactPreferencesData = localStorage.getItem("contactPreferences");
       if (contactPreferencesData) {
         const parsed = JSON.parse(contactPreferencesData);
         contactPrefs = {
-          email: parsed.email || 'N',
-          phone: parsed.phone || 'N',
-          post: parsed.post || 'N',
-          sms: parsed.sms || 'N'
+          email: parsed.email || "N",
+          phone: parsed.phone || "N",
+          post: parsed.post || "N",
+          sms: parsed.sms || "N",
         };
       }
     } catch (error) {
-      console.error('Error parsing contact preferences:', error);
+      console.error("Error parsing contact preferences:", error);
     }
-  
+
     // Create and populate FormData
     const form_Data = new FormData();
-    form_Data.append('auth', 0);
-    form_Data.append('session_id', sessionId);
-    form_Data.append('reference_no', refId);
-    form_Data.append('guest_details', JSON.stringify(formData)); 
-    form_Data.append('payment_method', formData.paywith);
-    form_Data.append('claim_donation', giftaidValue);
-    form_Data.append('tele_calling', contactPrefs.phone);
-    form_Data.append('send_email', contactPrefs.email);
-    form_Data.append('send_mail', contactPrefs.post);
-    form_Data.append('send_text', contactPrefs.sms);
-  
+    form_Data.append("auth", 0);
+    form_Data.append("session_id", sessionId);
+    form_Data.append("reference_no", refId);
+    form_Data.append("guest_details", JSON.stringify(updatedFormData));
+    form_Data.append("payment_method", formData.paywith);
+    form_Data.append("claim_donation", giftaidValue);
+    form_Data.append("tele_calling", contactPrefs.phone);
+    form_Data.append("send_email", contactPrefs.email);
+    form_Data.append("send_mail", contactPrefs.post);
+    form_Data.append("send_text", contactPrefs.sms);
     try {
       const response = await axios.post(
         `${apiUrl}payment/transaction`,
@@ -163,17 +159,16 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
         {
           headers: {
             Authorization: `Bearer ${apiToken}`,
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
-  
-      console.log('Transaction created successfully:', response.data);
+
+      console.log("Transaction created successfully:", response.data);
       setIsSuccess(response.data.success);
       return response.data;
-      
     } catch (error) {
-      console.error('Error in creating transaction:', error.message);
+      console.error("Error in creating transaction:", error.message);
       setIsSuccess(false);
       throw error;
     }
@@ -200,20 +195,19 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       address2: document.getElementById("address-2").value,
       postcode: document.getElementById("postCode").value,
       city: document.getElementById("city")?.value || NewCity,
-      city_id: 22,
-      city_name: "london",
+      city_id: "1",
+      city_name: document.getElementById("city")?.value || NewCity,
       country: String(document.getElementById("countries").value),
     };
 
     setFormData(updatedFormData);
-    console.log("Form Data:", updatedFormData);
 
     try {
       const refId = await updateReferenceId();
 
       console.log(refId, "refId");
 
-      await updateTransaction(refId);
+      await updateTransaction(refId, updatedFormData);
       // await buyFunction();
       // openPaymentModal();
       setIsPaymentGatewayOpen(true);
@@ -234,7 +228,11 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
           onPaymentSuccess={handlePaymentSuccess}
           setIsSuccess={setIsSuccess}
         /> */}
-        <PaymentForm setCurrentStep={setCurrentStep} isPaymentGatewayOpen={isPaymentGatewayOpen} setIsPaymentGatewayOpen={setIsPaymentGatewayOpen}/>
+        <PaymentForm
+          setCurrentStep={setCurrentStep}
+          isPaymentGatewayOpen={isPaymentGatewayOpen}
+          setIsPaymentGatewayOpen={setIsPaymentGatewayOpen}
+        />
         <form
           onSubmit={handleSubmit}
           className="flex justify-center items-center"
