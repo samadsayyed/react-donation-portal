@@ -118,7 +118,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       const giftaidData = localStorage.getItem("giftaidclaim");
       if (giftaidData) {
         const { value } = JSON.parse(giftaidData);
-        giftaidValue = value || "N";
+        giftaidValue = value? value: "N";
       }
     } catch (error) {
       console.error("Error parsing giftaid data:", error);
@@ -147,7 +147,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     form_Data.append("reference_no", refId);
     form_Data.append("guest_details", JSON.stringify(updatedFormData));
     form_Data.append("payment_method", formData.paywith);
-    form_Data.append("claim_donation", giftaidValue);
+    form_Data.append("is_giftaid", giftaidValue);
     form_Data.append("tele_calling", contactPrefs.phone);
     form_Data.append("send_email", contactPrefs.email);
     form_Data.append("send_mail", contactPrefs.post);
