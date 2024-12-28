@@ -19,6 +19,7 @@ function App() {
             <Route path="/donation-portal" element={<DonationHome />} />
             <Route path="/donation-portal/checkout" element={<Checkout/>} />
             <Route path="/test" element={<Test/>} />
+            <Route path="/success" element={<Test/>} />
           </Routes>
         </Router>
       </AppProvider>

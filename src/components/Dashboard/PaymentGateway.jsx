@@ -10,6 +10,7 @@ const PaymentForm = ({
   setIsSuccess,
   setIsPaymentGatewayOpen,
   isPaymentGatewayOpen,
+  reference_no
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -107,29 +108,32 @@ const PaymentForm = ({
         const donationData = {
           txn_id: paymentIntent.id,
           payment_amt: paymentIntent.amount / 100,
-          currency_code: paymentIntent.currency.toUpperCase(),
+          // currency_code: paymentIntent.currency.toUpperCase(),
           currency: paymentIntent.currency.toUpperCase(),
           payment_status: "Completed",
           payment_mode_code: "STRIPE",
-          auth_code: paymentIntent.authorization_code,
-          donor_id: "donor_12345", // Replace with actual donor ID
-          reference_no: "reference_12345", // Replace with actual reference
-          notes: "Food Packs donation for Pakistan",
+          auth_code: "",
+          // donor_id: "donor_12345", // Replace with actual donor ID
+          reference_no: reference_no, // Replace with actual reference
+          // notes: "Food Packs donation for Pakistan",
           auth: 0,
-          session_id: localStorage.getItem("sessionIdData"),
+          session_id: JSON.parse(localStorage.getItem("sessionIdData"))?.sessionId,
         };
 
-        // const donationResponse = await axios.post(
-        //   `${import.meta.env.VITE_ICHARMS_URL}payment/create-single-donation`,
-        //   donationData,
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${apiToken}`,
-        //       'Content-Type': 'application/json',
-        //     }
-        //   }
-        // );
-        // console.log(donationResponse,"donationResponse");
+        console.log(donationData, "donationData");
+        
+
+        const donationResponse = await axios.post(
+          `${import.meta.env.VITE_ICHARMS_URL}payment/create-single-donation`,
+          donationData,
+          {
+            headers: {
+              Authorization: `Bearer ${apiToken}`,
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+        console.log(donationResponse,"donationResponse");
         onPaymentSuccess(paymentIntent);
         setIsSuccess(true);
         setCurrentStep(5);

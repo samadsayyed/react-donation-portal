@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PAFModal from "./PAF";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
@@ -12,14 +11,11 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import PaymentPage from "../../../pages/test";
-
 
 const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const stripePromise = loadStripe(
     "pk_test_51QZ5TIP6D9LHv1Cj1DhRgOUqhSNlcoh8JOOYU77zkfmtX2g6LFKzNYkAu7j8H9qYCeHnIBgnpqfTWbb5p2WXdTsB00Yl6A05vL"
   );
-  
   const [formData, setFormData] = useState({
     title: "Mr",
     first_name: "",
@@ -32,21 +28,17 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     city: "",
     city_id: "",
     country: "",
-    paywith: ""
   });
-  const [paypalLoaded, setPaypalLoaded] = useState(false);
-
-  
   const [addCity, setAddCity] = useState(false);
   const [NewCity, setNewCity] = useState("");
   const [isPaymentGatewayOpen, setIsPaymentGatewayOpen] = useState(false);
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
-
+  const [reference_no, setReference_no] = useState(null);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [id]: value,
     }));
@@ -54,7 +46,8 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
   const handlePaymentSelection = (event) => {
     const selectedPayment = event.target.id;
-    setFormData(prev => ({
+    console.log("Payment method selected:", selectedPayment);
+    setFormData((prev) => ({
       ...prev,
       paywith: selectedPayment,
     }));
@@ -82,6 +75,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     return newSessionId;
   };
 
+  // React Query Mutation to update reference ID
   const updateReferenceId = async () => {
     const referenceId = Array(32)
       .fill(0)
@@ -98,7 +92,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
           },
         }
       );
-
+      setReference_no(response.data.reference_id);
       return response.data.reference_id;
     } catch (err) {
       console.error("Error in updating reference ID:", err.message);
@@ -107,25 +101,58 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   };
 
   // React Query Mutation to update transaction
-  const updateTransaction = async (refId) => {
+  const updateTransaction = async (refId ,updatedFormData) => {
+    // Generate session ID
     const sessionId = generateSessionId();
-    const giftaid = localStorage.getItem("giftaidclaim");
-      const { value } = JSON.parse(giftaid);
-      const contactPreferences = localStorage.getItem("contactPreferences");
-      const {email, phone, post, sms} = JSON.parse(contactPreferences);
-    const Form_Data = new FormData();
 
-    // Append the form fields to FormData
-    Form_Data.append("auth", 0);
-    Form_Data.append("session_id", sessionId);
-    Form_Data.append("reference_no", refId);
-    Form_Data.append("guest_details", JSON.stringify(formData));
-    Form_Data.append("payment_method", formData.paywith);
-    Form_Data.append("claim_donation", value);
-    Form_Data.append("tele_calling", phone);
-    Form_Data.append("send_email", email);
-    Form_Data.append("send_mail", post);
-    Form_Data.append("send_text", sms);
+    // Initialize default values
+    let giftaidValue = "N";
+    let contactPrefs = {
+      email: "N",
+      phone: "N",
+      post: "N",
+      sms: "N",
+    };
+
+    // Get giftaid information from localStorage
+    try {
+      const giftaidData = localStorage.getItem("giftaidclaim");
+      if (giftaidData) {
+        const { value } = JSON.parse(giftaidData);
+        giftaidValue = value || "N";
+      }
+    } catch (error) {
+      console.error("Error parsing giftaid data:", error);
+    }
+
+    // Get contact preferences from localStorage
+    try {
+      const contactPreferencesData = localStorage.getItem("contactPreferences");
+      if (contactPreferencesData) {
+        const parsed = JSON.parse(contactPreferencesData);
+        contactPrefs = {
+          email: parsed.email || "N",
+          phone: parsed.phone || "N",
+          post: parsed.post || "N",
+          sms: parsed.sms || "N",
+        };
+      }
+    } catch (error) {
+      console.error("Error parsing contact preferences:", error);
+    }
+
+    // Create and populate FormData
+    const form_Data = new FormData();
+    form_Data.append("auth", 0);
+    form_Data.append("session_id", sessionId);
+    form_Data.append("reference_no", refId);
+    form_Data.append("guest_details", JSON.stringify(updatedFormData));
+    form_Data.append("payment_method", formData.paywith);
+    form_Data.append("claim_donation", giftaidValue);
+    form_Data.append("tele_calling", contactPrefs.phone);
+    form_Data.append("send_email", contactPrefs.email);
+    form_Data.append("send_mail", contactPrefs.post);
+    form_Data.append("send_text", contactPrefs.sms);
     try {
       const response = await axios.post(
         `${apiUrl}payment/transaction`,
@@ -139,14 +166,25 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       );
 
       console.log("Transaction created successfully:", response.data);
-      if (response.data.success) {
-        setIsSuccess(true);
-      } else {
-        setIsSuccess(false);
+      setIsSuccess(response.data.success);
+      return response.data;
+    } catch (error) {
+      console.error("Error in creating transaction:", error.message);
+      setIsSuccess(false);
+      throw error;
+    }
+  };
+
+  const buyFunction = async () => {
+    try {
+      const response = await axios.post("http://localhost:3000/payment", {});
+      console.log(response, "response");
+
+      if (response.status === 200) {
+        window.location.href = response.data.url;
       }
-    } catch (err) {
-      console.error("Error in creating transaction:", err.message);
-      throw err;
+    } catch (error) {
+      console.error("Error processing payment:", error);
     }
   };
 
@@ -170,7 +208,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
       console.log(refId, "refId");
 
-      await updateTransaction(refId);
+      await updateTransaction(refId, updatedFormData);
       // await buyFunction();
       // openPaymentModal();
       setIsPaymentGatewayOpen(true);
@@ -180,11 +218,8 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     }
   };
 
-
-
-
   return (
-   
+    <>
       <Elements stripe={stripePromise}>
         {/* <button onClick={updateReferenceId}>Click Me</button> */}
         {/* <PaymentModal
@@ -194,7 +229,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
           onPaymentSuccess={handlePaymentSuccess}
           setIsSuccess={setIsSuccess}
         /> */}
-        <PaymentForm setCurrentStep={setCurrentStep} isPaymentGatewayOpen={isPaymentGatewayOpen} setIsPaymentGatewayOpen={setIsPaymentGatewayOpen}/>
+        <PaymentForm
+          setCurrentStep={setCurrentStep}
+          isPaymentGatewayOpen={isPaymentGatewayOpen}
+          setIsPaymentGatewayOpen={setIsPaymentGatewayOpen}
+          reference_no={reference_no}
+        />
         <form
           onSubmit={handleSubmit}
           className="flex justify-center items-center"
@@ -203,11 +243,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
             <h2 className="text-2xl font-bold mb-6 text-center text-[#02343F]">
               Enter Your Personal Details
             </h2>
-            
-            {/* Personal Details Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="w-full">
-                <label htmlFor="title" className="block text-gray-700 font-bold mb-2">
+                <label
+                  htmlFor="title"
+                  className="block text-gray-700 font-bold mb-2"
+                >
                   Title
                 </label>
                 <select
@@ -222,7 +263,10 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                 </select>
               </div>
               <div className="w-full">
-                <label htmlFor="first_name" className="block text-gray-700 font-bold mb-2">
+                <label
+                  htmlFor="first_name"
+                  className="block text-gray-700 font-bold mb-2"
+                >
                   <span className="text-red-600">*</span> First Name
                 </label>
                 <input
@@ -236,7 +280,10 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                 />
               </div>
               <div className="w-full">
-                <label htmlFor="last_name" className="block text-gray-700 font-bold mb-2">
+                <label
+                  htmlFor="last_name"
+                  className="block text-gray-700 font-bold mb-2"
+                >
                   <span className="text-red-600">*</span> Last Name
                 </label>
                 <input
@@ -250,10 +297,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                 />
               </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div className="w-full">
-                <label htmlFor="phone" className="block text-gray-700 font-bold mb-2">
+                <label
+                  htmlFor="phone"
+                  className="block text-gray-700 font-bold mb-2"
+                >
                   <span className="text-red-600">*</span> Phone
                 </label>
                 <input
@@ -267,7 +316,10 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                 />
               </div>
               <div className="w-full">
-                <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-gray-700 font-bold mb-2"
+                >
                   <span className="text-red-600">*</span> Email
                 </label>
                 <input
@@ -281,10 +333,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                 />
               </div>
             </div>
-
             <hr className="border-t border-black md:mx-[-40px] my-4" />
-            
-            {/* Address Section */}
             <PAFModal
               NewCity={NewCity}
               setNewCity={setNewCity}
@@ -293,17 +342,17 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
               currentStep={currentStep}
               setCurrentStep={setCurrentStep}
             />
-
             <hr className="border-t border-black md:mx-[-40px] my-4" />
-            
-            {/* Payment Method Section */}
             <h2 className="text-2xl font-bold mb-6 text-center text-[#02343F]">
               Select Payment Method
             </h2>
             <div className="container mx-auto md:p-6">
               <div className="grid grid-cols-3 gap-6">
                 {["stripe", "worldpay", "paypal"].map((paymentMethod) => (
-                  <div key={paymentMethod} className="flex items-center flex-col bg-gray-50 border">
+                  <div
+                    key={paymentMethod}
+                    className={`flex items-center flex-col bg-gray-50 border `}
+                  >
                     <input
                       type="radio"
                       id={paymentMethod}
@@ -327,22 +376,18 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
               </div>
             </div>
 
-            {/* Payment Buttons Section */}
-            {formData.paywith === 'paypal' ? 
-               <><PaymentPage/></>
-             : (
-              <div className="text-center mt-6">
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded bg-[#02343F] text-white hover:bg-[#02343fc5]"
-                >
-                  Proceed To Payment
-                </button>
-              </div>
-            )}
+            <div className="text-center mt-6">
+              <button
+                type="submit"
+                className="px-4 py-2 rounded bg-[#02343F] text-white hover:bg-[#02343fc5] "
+              >
+                Proceed To Payment
+              </button>
+            </div>
           </div>
         </form>
       </Elements>
+    </>
   );
 };
 
