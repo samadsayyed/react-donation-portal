@@ -74,7 +74,12 @@ const PaymentForm = ({
       // Create payment intent
       const createIntentResponse = await axios.post(
         "https://node-donation-portal.onrender.com/create-payment-intent",
-        { amount: 10000 }, // £100.00 in pence
+        { amount: cartItems
+            .reduce(
+              (total, item) => total + item.donation_amount * item.quantity,
+              0
+            )
+            .toFixed(2) * 100 }, // £100.00 in pence
         {
           headers: {
             Authorization: `Bearer ${apiToken}`,
