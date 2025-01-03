@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import "../../index.css";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../AppContext";
 
-const CartData = (props) => {
+
+const CartData = () => {
+  const { cartCount, setCartCount } = useAppContext();
   const [isCartVisible, setIsCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
   const generateSessionId = () => {
@@ -65,17 +67,13 @@ const CartData = (props) => {
   const toggleCartVisibility = () => {
     const newVisibility = !isCartVisible;
     setIsCartVisible(newVisibility);
-
-    if (newVisibility) {
+      if (newVisibility) {
       console.log("Opening cart...", newVisibility);
-      fetchCart(); // Fetch cart data when opening the cart
+      fetchCart(); 
     }
   };
   const removeCartItem = async (cartId) => {
-    // console.log(event.target);
-    // const cartId = event.target.getAttribute("data-cart-id");
     console.log("Removing item with ID:", cartId);
-
     try {
       const response = await fetch(`${apiUrl}cart/delete`, {
         method: "POST",
@@ -89,7 +87,7 @@ const CartData = (props) => {
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-
+      setCartCount(prevCount => Math.max(0, prevCount - 1));      
       fetchCart();
     } catch (err) {
       setError(err.message);
@@ -164,8 +162,7 @@ const CartData = (props) => {
           </svg>
           <span class="animate-ping absolute -top-2 -right-2 inline-flex rounded-full h-5 w-5 bg-red-500"></span>
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            {/* {cartItems.length ? cartItems.length : 1} */}
-            {props.cartCount}
+            {cartCount}
           </span>
         </button>
       </div>
