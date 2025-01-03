@@ -308,6 +308,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                 <input
                   type="number"
                   id="phone"
+                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Enter your phone no"

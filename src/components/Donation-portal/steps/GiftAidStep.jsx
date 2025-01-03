@@ -67,7 +67,7 @@ const GiftAid = () => {
         />
         <label
           htmlFor="teal-checkbox"
-          className="ms-2 text-md font-medium text-gray-900 dark:text-gray-300"
+          className="ms-2 text-md font-medium text-white"
         >
           Claim Gift Aid on my donation
         </label>
