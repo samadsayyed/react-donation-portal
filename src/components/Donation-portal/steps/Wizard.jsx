@@ -87,8 +87,7 @@ const Wizard = () => {
   };
 
   const renderNavigationButtons = () => {
-    // Don't render navigation buttons on step 5
-    if (currentStep === 4) return null;
+    // if (currentStep === 4) return null;
 
     return (
       <div className="mt-6 flex justify-between px-4">
