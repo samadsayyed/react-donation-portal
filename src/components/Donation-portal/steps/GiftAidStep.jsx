@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "../../../index.css";
+import ContactForm from "./ContactForm";
 
 const GiftAid = () => {
   // Function to store the value with expiry
@@ -39,6 +40,7 @@ const GiftAid = () => {
   }, []); // Empty dependency array to run only on component mount
 
   return (
+    <>
     <div className="md:p-8 rounded-lg max-w-3xl text-center">
       <h1 className="text-2xl font-bold mb-4 text-[#02343F]">
         Increase The Value Of Your Donation With Gift Aid
@@ -83,6 +85,8 @@ const GiftAid = () => {
         charitable programmes.
       </p>
     </div>
+    <ContactForm />
+    </>
   );
 };
 

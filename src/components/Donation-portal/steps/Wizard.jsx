@@ -35,18 +35,18 @@ const Wizard = () => {
         />
       ),
     },
+    // {
+    //   number: 3,
+    //   title: "Communication",
+    //   component: (
+    //     <ContactForm
+    //       currentStep={currentStep}
+    //       setCurrentStep={setCurrentStep}
+    //     />
+    //   ),
+    // },
     {
       number: 3,
-      title: "Communication",
-      component: (
-        <ContactForm
-          currentStep={currentStep}
-          setCurrentStep={setCurrentStep}
-        />
-      ),
-    },
-    {
-      number: 4,
       title: "Personal Info",
       component: (
         <PersonalDetailsForm
@@ -57,7 +57,7 @@ const Wizard = () => {
       ),
     },
     {
-      number: 5,
+      number: 4,
       title: "Confirmation",
       component: (
         <>
@@ -87,7 +87,7 @@ const Wizard = () => {
   };
 
   const renderNavigationButtons = () => {
-    // if (currentStep === 4) return null;
+    if (currentStep === 4) return null;
 
     return (
       <div className="mt-6 flex justify-between px-4">
