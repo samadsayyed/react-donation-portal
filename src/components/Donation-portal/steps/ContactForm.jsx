@@ -78,7 +78,7 @@ const ContactForm = () => {
 
   return (
     <>
-      <hr className="border-1 border-black" />
+      <hr className="border-1 border-black pb-4 md:py-0" />
       <div className="flex justify-center items-center">
         <div className="bg-white rounded-lg md:p-8 px-2 w-full">
           <h1 className="text-2xl font-bold mb-4 text-center text-[#02343F]">
@@ -93,7 +93,7 @@ const ContactForm = () => {
           </div>
 
           <div className="container mx-auto md:p-6">
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-4 md:gap-6 gap-2">
               {/* Email Checkbox */}
               <div className="flex items-center flex-col bg-gray-50 border pt-4">
                 <input
@@ -112,7 +112,7 @@ const ContactForm = () => {
                     alt=""
                     className="md:w-[75px] md:h-[75px] w-[25px] h-[25px]"
                   />
-                  <span className="md:text-sm text-[10px] font-medium">
+                  <span className="text-sm font-medium">
                     Send me updates by email
                   </span>
                 </label>

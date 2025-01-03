@@ -119,7 +119,7 @@ const ProgramsList = () => {
 
   // Error and Loading States
   if (programsLoading) {
-    return <div>Loading programs...</div>;
+    return <div className="flex justify-center items-center top-1/2 absolute right-1/2">Loading programs...</div>;
   }
 
   if (programsError) {

@@ -41,7 +41,7 @@ const GiftAid = () => {
 
   return (
     <>
-    <div className="md:p-8 rounded-lg max-w-3xl text-center">
+    <div className="md:p-8 rounded-lg max-w-3xl text-center pb-4">
       <h1 className="text-2xl font-bold mb-4 text-[#02343F]">
         Increase The Value Of Your Donation With Gift Aid
       </h1>

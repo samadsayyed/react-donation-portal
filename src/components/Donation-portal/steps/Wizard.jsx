@@ -17,7 +17,7 @@ const Wizard = () => {
   const steps = [
     {
       number: 1,
-      title: "Cart",
+      title: "Donation Cart",
       component: (
         <DonationCart
           currentStep={currentStep}
@@ -120,7 +120,7 @@ const Wizard = () => {
 
   return (
     <Elements stripe={stripePromise}>
-      <div className="w-full py-20 max-w-3xl mx-auto">
+      <div className="w-full py-20 max-w-3xl mx-auto px-2 md:px-0">
         <div className="relative mb-12">
           <div
             id="progress-bar"
@@ -151,7 +151,7 @@ const Wizard = () => {
           </div>
         </div>
 
-        <div className="bg-white md:p-6 px-2 rounded-lg shadow-sm border-gray-200 min-h-48">
+        <div className="bg-white md:p-6 px-2 rounded-lg border-gray-200 min-h-48">
           {steps.map((step) => (
             <div
               key={step.number}
