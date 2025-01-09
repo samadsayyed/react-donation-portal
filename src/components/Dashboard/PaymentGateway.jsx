@@ -90,12 +90,17 @@ const PaymentForm = ({
       );
 
       const { clientSecret } = createIntentResponse.data;
-
+      console.log(reference_no, "reference_no");
+      
       const { error: confirmError, paymentIntent } =
         await stripe.confirmCardPayment(clientSecret, {
           payment_method: paymentMethod.id,
           receipt_email: email,
+          reference_no: reference_no
         });
+
+
+      
 
       if (confirmError) {
         setError(confirmError.message);
