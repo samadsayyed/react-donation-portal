@@ -141,7 +141,7 @@ const PaymentForm = ({
         console.log(donationResponse,"donationResponse");
         onPaymentSuccess(paymentIntent);
         setIsSuccess(true);
-        setCurrentStep(5);
+        setCurrentStep(4);
         // if (donationResponse.data.success) {
           
         // } else {
@@ -156,7 +156,7 @@ const PaymentForm = ({
       setError("An error occurred during the payment process.");
     } finally {
       setLoading(false);
-      setCurrentStep(5);
+      setCurrentStep(4);
       setIsPaymentGatewayOpen(false);
       window.scrollTo({
         top: 0,

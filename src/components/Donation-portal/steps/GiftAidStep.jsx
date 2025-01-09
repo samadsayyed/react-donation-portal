@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "../../../index.css";
+import ContactForm from "./ContactForm";
 
 const GiftAid = () => {
   // Function to store the value with expiry
@@ -39,10 +40,25 @@ const GiftAid = () => {
   }, []); // Empty dependency array to run only on component mount
 
   return (
-    <div className="md:p-8 rounded-lg max-w-3xl text-center">
+    <>
+    <div className="md:p-8 rounded-lg max-w-3xl text-center pb-4">
       <h1 className="text-2xl font-bold mb-4 text-[#02343F]">
         Increase The Value Of Your Donation With Gift Aid
       </h1>
+      <div className="mb-4 bg-[#02343F] text-white max-w-xl mx-auto py-4">
+        <input
+          id="teal-checkbox"
+          type="checkbox"
+          className="w-6 h-6 accent-white align-middle"
+          onChange={updateLocalStorageWithExpiry}
+        />
+        <label
+          htmlFor="teal-checkbox"
+          className="ms-2 text-md font-medium text-white"
+        >
+          Claim Gift Aid on my donation
+        </label>
+      </div>
       <div className="flex items-center justify-center mb-4">
         <div className="flex items-center">
           <img
@@ -58,20 +74,7 @@ const GiftAid = () => {
           25% at no extra cost to you!
         </span>
       </p>
-      <div className="mb-4 bg-[#02343F] text-white max-w-xl mx-auto py-4">
-        <input
-          id="teal-checkbox"
-          type="checkbox"
-          className="w-6 h-6 accent-white align-middle"
-          onChange={updateLocalStorageWithExpiry} // Corrected handler
-        />
-        <label
-          htmlFor="teal-checkbox"
-          className="ms-2 text-md font-medium text-gray-900 dark:text-gray-300"
-        >
-          Claim Gift Aid on my donation
-        </label>
-      </div>
+    
       <p className="text-sm text-gray-600 mb-2 text-justify max-w-2xl">
         I am a UK taxpayer and I understand that if I pay less Income and/or
         Capital Gains Tax than the amount of Gift Aid claimed on all my
@@ -83,6 +86,8 @@ const GiftAid = () => {
         charitable programmes.
       </p>
     </div>
+    <ContactForm />
+    </>
   );
 };
 

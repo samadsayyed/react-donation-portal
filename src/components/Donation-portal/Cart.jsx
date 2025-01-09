@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import "../../index.css";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../AppContext";
 
-const CartData = (props) => {
+
+const CartData = () => {
+  const { cartCount, setCartCount } = useAppContext();
   const [isCartVisible, setIsCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
   const generateSessionId = () => {
@@ -65,17 +67,13 @@ const CartData = (props) => {
   const toggleCartVisibility = () => {
     const newVisibility = !isCartVisible;
     setIsCartVisible(newVisibility);
-
-    if (newVisibility) {
+      if (newVisibility) {
       console.log("Opening cart...", newVisibility);
-      fetchCart(); // Fetch cart data when opening the cart
+      fetchCart(); 
     }
   };
   const removeCartItem = async (cartId) => {
-    // console.log(event.target);
-    // const cartId = event.target.getAttribute("data-cart-id");
     console.log("Removing item with ID:", cartId);
-
     try {
       const response = await fetch(`${apiUrl}cart/delete`, {
         method: "POST",
@@ -89,7 +87,7 @@ const CartData = (props) => {
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-
+      setCartCount(prevCount => Math.max(0, prevCount - 1));      
       fetchCart();
     } catch (err) {
       setError(err.message);
@@ -146,7 +144,7 @@ const CartData = (props) => {
       <div className="fixed top-24 right-4 z-50">
         <button
           onClick={toggleCartVisibility}
-          className="bg-teal-900 text-white p-3 rounded-full relative hover:bg-teal-800"
+          className="bg-teal-900 text-white p-3 rounded-full relative hover:bg-teal-800 "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -162,9 +160,9 @@ const CartData = (props) => {
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
             ></path>
           </svg>
+          <span class="animate-ping absolute -top-2 -right-2 inline-flex rounded-full h-5 w-5 bg-red-500"></span>
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            {/* {cartItems.length ? cartItems.length : 1} */}
-            {props.cartCount}
+            {cartCount}
           </span>
         </button>
       </div>
@@ -295,7 +293,7 @@ const CartData = (props) => {
                       .toFixed(2)}
                   </span>
                 </div>
-                <Link to={"/donation-portal/checkout"} >
+                <Link to={"/donation-portal/checkout"}>
                   <button className="w-full bg-teal-900 text-white py-3 rounded-md hover:bg-teal-800">
                     Proceed to Checkout
                   </button>

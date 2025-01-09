@@ -119,7 +119,7 @@ const ProgramsList = () => {
 
   // Error and Loading States
   if (programsLoading) {
-    return <div>Loading programs...</div>;
+    return <div className="flex justify-center items-center top-1/2 absolute right-1/2">Loading programs...</div>;
   }
 
   if (programsError) {
@@ -128,7 +128,7 @@ const ProgramsList = () => {
 
   return (
     <DonationPortalLayout>
-      <CartData cartCount={cartCount} />
+      <CartData />
       <div className="container mx-auto max-w-6xl px-4 py-20">
         <h1 className="text-3xl font-bold text-center mb-10 text-teal-900">
           Select Program

@@ -131,7 +131,7 @@ const DonationCart = () => {
           participant_name: plaqueNames,
         }),
       });
-
+alert("Plaque names updated successfully");
       const data = await response.json();
       if (data.success === false) {
         alert("Plaque names updated already");
