@@ -12,7 +12,7 @@ const Success = () => {
       <div className="bg-white rounded-lg p-8 w-full max-w-md text-center">
         <h2 className="text-2xl font-bold mb-4">Thank You For Your Donation</h2>
         <div className="flex justify-center items-center bg-green-600 w-20 h-20 rounded-full mx-auto mb-6">
-        <p className="text-[60px] text-white">✓</p>
+        <img src="/right.gif" alt="Payment Success" />
         </div>
         <p className="text-gray-700 mb-6">Order #SO-{referenceId} Confirmed</p>
 

@@ -13,7 +13,7 @@ const Failed = () => {
         <h2 className="text-2xl font-bold mb-4">Transaction Failed</h2>
 
         <div className="flex justify-center items-center bg-red-500  w-20 h-20 rounded-full mx-auto mb-6">
-        <p className="text-[50px] text-white">X</p>
+        <img src="/wrong.gif" alt="Payment Failed" />
         </div>
 
         <p className="text-gray-700 mb-6">Order #SO-{referenceId}</p>
