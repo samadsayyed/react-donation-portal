@@ -349,7 +349,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
             </h2>
             <div className="container mx-auto md:p-6">
               <div className="grid grid-cols-3 gap-6">
-                {["stripe", "worldpay", "paypal"].map((paymentMethod) => (
+                {["stripe"].map((paymentMethod) => (
                   <div
                     key={paymentMethod}
                     className={`flex items-center flex-col bg-gray-50 border `}
