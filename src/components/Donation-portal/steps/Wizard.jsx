@@ -108,7 +108,7 @@ const Wizard = () => {
 
         {currentStep > 1 && <button
           onClick={() => updateUI(currentStep + 1)}
-          disabled={currentStep === steps.length || currentStep > 1 }
+          disabled={currentStep === steps.length}
           className={`px-4 py-2 rounded ${
             currentStep === steps.length
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
