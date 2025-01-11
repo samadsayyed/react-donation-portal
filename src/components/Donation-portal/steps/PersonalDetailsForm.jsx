@@ -307,7 +307,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                   <span className="text-red-600">*</span> Phone
                 </label>
                 <input
-                  type="tel"
+                  type="number"
                   id="phone"
                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                   value={formData.phone}

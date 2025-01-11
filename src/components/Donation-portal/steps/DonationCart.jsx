@@ -205,7 +205,7 @@ const DonationCart = ({setCurrentStep}) => {
   
       // Only proceed if all updates were successful
       if (allUpdatesSuccessful) {
-        alert("All plaque names updated successfully");
+        // alert("All plaque names updated successfully");
         // Safely update step
         setCurrentStep(prevStep => {
           try {
