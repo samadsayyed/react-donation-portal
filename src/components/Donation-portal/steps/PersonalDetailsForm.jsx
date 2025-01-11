@@ -104,9 +104,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const updateTransaction = async (refId ,updatedFormData) => {
     // Generate session ID
     const sessionId = generateSessionId();
-
-    // Initialize default values
-    let giftaidValue = "N";
     let contactPrefs = {
       email: "N",
       phone: "N",
@@ -114,9 +111,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       sms: "N",
     };
 
+    // Initialize default values
+    let giftaidValue = "N";
+
     // Get giftaid information from localStorage
+    let giftaidData = localStorage.getItem("giftaidclaim");
     try {
-      const giftaidData = localStorage.getItem("giftaidclaim");
       if (giftaidData) {
         const { value } = JSON.parse(giftaidData);
         giftaidValue = value? value: "N";
@@ -140,7 +140,8 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     } catch (error) {
       console.error("Error parsing contact preferences:", error);
     }
-
+    console.log(giftaidValue,"giftaidValue");
+    
     // Create and populate FormData
     const form_Data = new FormData();
     form_Data.append("auth", 0);
@@ -148,7 +149,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     form_Data.append("reference_no", refId);
     form_Data.append("guest_details", JSON.stringify(updatedFormData));
     form_Data.append("payment_method", formData.paywith);
-    // form_Data.append("is_giftaid", giftaidValue);
+    form_Data.append("claim_donation","Y" );
     form_Data.append("tele_calling", contactPrefs.phone);
     form_Data.append("send_email", contactPrefs.email);
     form_Data.append("send_mail", contactPrefs.post);
@@ -306,7 +307,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                   <span className="text-red-600">*</span> Phone
                 </label>
                 <input
-                  type="number"
+                  type="tel"
                   id="phone"
                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                   value={formData.phone}

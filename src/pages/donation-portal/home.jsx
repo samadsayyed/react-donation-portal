@@ -56,6 +56,10 @@ const ProgramsList = () => {
     },
   });
 
+
+  console.log(programs,"programs");
+  
+
   // Fetch cart items
   const fetchCart = async () => {
     // console.log("Fetching cart data...");
@@ -104,7 +108,7 @@ const ProgramsList = () => {
       donation_period: "one-off",
       currency: "GBP",
       currency_id: 1,
-      category_id: 3,
+      category_id: 2,
       program_id: programId,
       country_id: programCountry,
       quantity: programQuantity,
@@ -141,7 +145,7 @@ const ProgramsList = () => {
         )}
 
         <div className="programs-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {programs?.map((program) => (
+          {programs?.filter((program) => program.program_is_animal === "Y")?.map((program) => (
             <div
               className="program-card rounded-2xl overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
               key={program.program_id}

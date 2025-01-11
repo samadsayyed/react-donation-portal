@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../index.css";
 import { Link } from "react-router-dom";
 
-const DonationCart = () => {
+const DonationCart = ({setCurrentStep}) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -116,10 +116,11 @@ const DonationCart = () => {
   };
   const pushParticipantNames = async (cartId, plaqueNames) => {
     try {
-      if (!plaqueNames) {
-        alert("Please enter plaque names !!!!");
-        return;
+      // Input validation
+      if (!cartId || !plaqueNames) {
+        throw new Error("Missing required data: cart ID or plaque names");
       }
+  
       const response = await fetch(`${apiUrl}cart/participant`, {
         method: "POST",
         headers: {
@@ -128,61 +129,97 @@ const DonationCart = () => {
         },
         body: JSON.stringify({
           cart_id: cartId,
-          participant_name: plaqueNames,
+          participant_name: plaqueNames.trim(),
         }),
       });
-alert("Plaque names updated successfully");
+  
       const data = await response.json();
-      if (data.success === false) {
-        alert("Plaque names updated already");
-      } else {
-        console.log("Plaque names updated successfully");
-      }
-
+  
       if (!response.ok) {
-        throw new Error(`Error: ${response.json().success}`);
+        throw new Error(data.message || `Error: ${response.status}`);
       }
-      // fetchCart();
+  
+      // if (data.success === false) {
+      //   alert("Plaque names already updated for this item");
+      //   return false;
+      // }
+  
+      return true;
+  
     } catch (err) {
       console.error("Error pushing participant names:", err);
-      setError(err.message);
+      throw err; // Re-throw to handle in the parent function
     }
   };
+  
   const updateParticipantNames = async (event) => {
-    // Get all cart IDs from the cartItems state
-    const cartData = cartItems.map(item => {
-      // For each cart item, find all associated plaque name inputs
-      const plaqueInputs = document.querySelectorAll(
-        `input[data-cart-id="${item.cart_id}"]#plaque-name`
-      );
-  
-      // Get all plaque names for this cart item and join with comma
-      const plaqueNames = Array.from(plaqueInputs)
-        .map((input) => input.value.trim())
-        .filter((name) => name !== "")
-        .join(", ");
-  
-      // Return object in required format
-      return {
-        cart_id: item.cart_id,
-        participant_name: plaqueNames
-      };
-    });
-  
-    // Log the formatted data
-    // console.log("Cart Data to be submitted:", cartData);
-  
-    // Push participant names for each cart item
     try {
-      for (const item of cartData) {
-        if (!item.participant_name) {
-          alert(`Please enter plaque names for all items!`);
-          return;
-        }
-        await pushParticipantNames(item.cart_id, item.participant_name);
+      // Input validation
+      if (!cartItems?.length) {
+        alert("No cart items found");
+        return;
       }
+  
+      const cartData = cartItems.map(item => {
+        const plaqueInputs = document.querySelectorAll(
+          `input[data-cart-id="${item.cart_id}"]#plaque-name`
+        );
+  
+        // Validate inputs exist
+        if (!plaqueInputs?.length) {
+          throw new Error(`No plaque inputs found for cart ID: ${item.cart_id}`);
+        }
+  
+        const plaqueNames = Array.from(plaqueInputs)
+          .map(input => input.value?.trim())
+          .filter(name => name !== "")
+          .join(", ");
+  
+        return {
+          cart_id: item.cart_id,
+          participant_name: plaqueNames
+        };
+      });
+  
+      // Validate all items have names
+      const missingNames = cartData.find(item => !item.participant_name);
+      if (missingNames) {
+        alert("Please enter plaque names for all items!");
+        return;
+      }
+  
+      // Track success for all updates
+      let allUpdatesSuccessful = true;
+  
+      // Update each cart item
+      for (const item of cartData) {
+        const success = await pushParticipantNames(
+          item.cart_id, 
+          item.participant_name
+        );
+        if (!success) {
+          allUpdatesSuccessful = false;
+          break;
+        }
+      }
+  
+      // Only proceed if all updates were successful
+      if (allUpdatesSuccessful) {
+        alert("All plaque names updated successfully");
+        // Safely update step
+        setCurrentStep(prevStep => {
+          try {
+            return prevStep + 1;
+          } catch (err) {
+            console.error("Error updating step:", err);
+            return prevStep;
+          }
+        });
+      }
+  
     } catch (err) {
       console.error("Error updating participant names:", err);
+      alert(`Error: ${err.message}`);
       setError(err.message);
     }
   };
@@ -243,6 +280,7 @@ alert("Plaque names updated successfully");
                           type="checkbox"
                           data-cart-id={item.cart_id}
                           data-index={index}
+                          required
                           data-cart-quantity={item.quantity}
                           className="sr-only peer plaque-input"
                         />
@@ -302,7 +340,7 @@ alert("Plaque names updated successfully");
         
               className="bg-teal-600 text-white px-4 py-2 rounded"
             >
-              Submit Plaque Names
+              Proceed
             </button>
           </div>
         </ul>

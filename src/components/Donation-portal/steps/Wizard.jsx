@@ -74,6 +74,9 @@ const Wizard = () => {
     },
   ];
 
+  console.log(currentStep, "currentStep");
+  
+
   const topScroll = () => {
     window.scrollTo({
       top: 0,
@@ -103,9 +106,9 @@ const Wizard = () => {
           Previous
         </button>
 
-        <button
+        {currentStep > 1 && <button
           onClick={() => updateUI(currentStep + 1)}
-          disabled={currentStep === steps.length}
+          disabled={currentStep === steps.length || currentStep > 1 }
           className={`px-4 py-2 rounded ${
             currentStep === steps.length
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
@@ -113,7 +116,7 @@ const Wizard = () => {
           }`}
         >
           Next
-        </button>
+        </button>}
       </div>
     );
   };
