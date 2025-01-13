@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 // import "../../../../index.css";
-import CountrySelector from "./CountrySelector.jsx";
 import toast from "react-hot-toast";
 
 const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
