@@ -144,53 +144,65 @@ const ProgramsList = () => {
           </div>
         )}
 
-        <div className="programs-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {programs?.filter((program) => program.program_is_animal === "Y")?.map((program) => (
-            <div
-              className="program-card rounded-2xl overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
-              key={program.program_id}
-            >
-              <div className="relative">
-                <img
-                  src={program.image}
-                  alt={program.program_name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="bg-teal-900 p-4">
-                  <h3 className="text-white text-center font-semibold text-lg">
-                    {program.program_name}
-                  </h3>
-                  <p className="text-white text-center text-xl font-bold mt-1">
-                    £{program.program_rate}
-                  </p>
-                  <button
-                    onClick={handleAddToCart}
-                    className="donate-btn w-full bg-cream mt-2 text-teal-900 py-2 px-4 rounded-md flex items-center justify-center space-x-2 hover:bg-opacity-90 transition-colors"
-                    style={{ backgroundColor: "#F5E6D3" }}
-                    data-program-rate={program.program_rate}
-                    data-program-id={program.program_id}
-                    data-program-quantity={1}
-                    data-program-country={program.country_id}
-                  >
-                    Add to Cart
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+      {programs
+        ?.filter((program) => program.program_is_animal === "Y")
+        ?.map((program) => (
+          <div
+            key={program.program_id}
+            className="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl"
+          >
+            <div className="relative">
+              <img
+                src={program.image}
+                alt={program.program_name}
+                className="w-full h-52 object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-2">
+                {/* <hr className="h-4 w-4 text-teal-700" /> */}
+                <span className="text-sm font-medium text-teal-900">
+                  {program.country_name}
+                </span>
               </div>
             </div>
-          ))}
-        </div>
+
+            <div className="bg-teal-900 p-5 space-y-3">
+              <div className="space-y-1">
+                <h3 className="text-white font-semibold text-lg line-clamp-2">
+                  {program.program_name}
+                </h3>
+                <p className="text-white text-2xl font-bold">
+                  £{program.program_rate}
+                </p>
+              </div>
+
+              <button
+                onClick={handleAddToCart}
+                className="w-full bg-cream hover:bg-cream/90 text-teal-900 py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
+                style={{ backgroundColor: "#F5E6D3" }}
+                data-program-rate={program.program_rate}
+                data-program-id={program.program_id}
+                data-program-quantity={1}
+                data-program-country={program.country_id}
+              >
+                Add to Cart
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        ))}
+    </div>
       </div>
     </DonationPortalLayout>
   );
