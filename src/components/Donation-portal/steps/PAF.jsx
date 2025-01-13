@@ -279,9 +279,9 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
                     ? "No cities found"
                     : "Select a city"}
                 </option>
-                {cities.length === 0 ? (
-                  <option value="add-city">Add City</option>
-                ) : null}
+                <option value="add-city">Add City</option>
+                {/* {cities.length === 0 ? (
+                ) : null} */}
                 {cities.map((city) => (
                   <option key={city.city_id} value={city.city_name || ""}>
                     {city.city_name || "Select City"}
