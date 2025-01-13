@@ -202,6 +202,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       country: String(document.getElementById("countries").value),
     };
 
+    const phoneNumberPattern = /^[0-9]{11}$/; // Adjust the pattern as per your requirements
+    if (!phoneNumberPattern.test(formData.phone)) {
+      alert("Please enter a valid 10-digit phone number.");
+      return; // Stop form submission if validation fails
+    }
+
     setFormData(updatedFormData);
 
     try {
@@ -350,7 +356,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
             </h2>
             <div className="container mx-auto md:p-6">
               <div className="grid grid-cols-3 gap-6">
-                {["stripe"].map((paymentMethod) => (
+                {["stripe"].map((paymentMethod,index, arr) => (
                   <div
                     key={paymentMethod}
                     className={`flex items-center flex-col bg-gray-50 border `}
@@ -362,6 +368,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                       className="relative md:right-[-80px] top-2"
                       onChange={handlePaymentSelection}
                       required
+                      checked={arr.length == 1}
                     />
                     <label
                       htmlFor={paymentMethod}
@@ -378,7 +385,18 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
               </div>
             </div>
 
-            <div className="text-center mt-6">
+            <div className="flex justify-between">
+            <button
+          onClick={() => setCurrentStep(currentStep - 1)}
+          disabled={currentStep === 1}
+          className={`px-4 py-2 rounded ${
+            currentStep === 1
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
+        >
+          Previous
+        </button>
               <button
                 type="submit"
                 className="px-4 py-2 rounded bg-[#02343F] text-white hover:bg-[#02343fc5] "

@@ -94,6 +94,7 @@ const Wizard = () => {
 
     return (
       <div className="mt-6 flex justify-between px-4">
+      {currentStep !== 3 && currentStep !== 1 &&
         <button
           onClick={() => updateUI(currentStep - 1)}
           disabled={currentStep === 1}
@@ -104,9 +105,9 @@ const Wizard = () => {
           }`}
         >
           Previous
-        </button>
+        </button>}
 
-        {currentStep > 1 && <button
+        {currentStep > 1 && currentStep !== 3 && <button
           onClick={() => updateUI(currentStep + 1)}
           disabled={currentStep === steps.length}
           className={`px-4 py-2 rounded ${
@@ -131,10 +132,10 @@ const Wizard = () => {
           ></div>
 
           <div className="relative flex justify-between">
-            {steps.map((step) => (
+            {steps.map((step) => step.number !== 4 && (
               <div 
                 key={step.number} 
-                onClick={() => currentStep !== 5 && setCurrentStep(step.number)} 
+                onClick={() => currentStep !== 5 } 
                 className={`flex flex-col items-center ${currentStep !== 5 ? 'cursor-pointer' : 'cursor-default'}`}
               >
                 <div

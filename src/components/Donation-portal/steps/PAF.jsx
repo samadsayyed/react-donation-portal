@@ -301,9 +301,9 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
               </button>
             </h2>
 
-            <p className="pb-4">
+            {/* <p className="pb-4">
               Click select button or double-click on an address to select
-            </p>
+            </p> */}
 
             {error && (
               <p className="text-red-500 mb-4 font-bold text-xl">

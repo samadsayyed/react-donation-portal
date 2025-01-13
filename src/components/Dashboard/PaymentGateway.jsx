@@ -146,11 +146,6 @@ const PaymentForm = ({
         onPaymentSuccess(paymentIntent);
         setIsSuccess(true);
         setCurrentStep(4);
-        // if (donationResponse.data.success) {
-
-        // } else {
-        //   setIsSuccess(false);
-        // }
       } else {
         setError("Payment failed. Please try again.");
         setIsSuccess(false);
