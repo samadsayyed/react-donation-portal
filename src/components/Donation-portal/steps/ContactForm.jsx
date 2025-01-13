@@ -81,7 +81,7 @@ const ContactForm = () => {
       <hr className="border-1 border-black pb-4 md:py-0" />
       <div className="flex justify-center items-center">
         <div className="bg-white rounded-lg md:p-8 px-2 w-full">
-          <h1 className="text-2xl font-bold mb-4 text-center text-[#02343F]">
+          <h1 className="text-2xl font-bold mb-4 text-center text-primary">
             Almost there!
           </h1>
 
@@ -99,7 +99,7 @@ const ContactForm = () => {
                 <input
                   type="checkbox"
                   id="email"
-                  className="relative md:right-[-45px] accent-[#02343F]"
+                  className="relative md:right-[-45px] accent-primary"
                   checked={preferences.email === "Y"}
                   onChange={handleCheckboxChange}
                 />
@@ -123,7 +123,7 @@ const ContactForm = () => {
                 <input
                   type="checkbox"
                   id="phone"
-                  className="relative md:right-[-45px] accent-[#02343F]"
+                  className="relative md:right-[-45px] accent-primary"
                   checked={preferences.phone === "Y"}
                   onChange={handleCheckboxChange}
                 />
@@ -147,7 +147,7 @@ const ContactForm = () => {
                 <input
                   type="checkbox"
                   id="post"
-                  className="relative md:right-[-45px] accent-[#02343F]"
+                  className="relative md:right-[-45px] accent-primary"
                   checked={preferences.post === "Y"}
                   onChange={handleCheckboxChange}
                 />
@@ -171,7 +171,7 @@ const ContactForm = () => {
                 <input
                   type="checkbox"
                   id="sms"
-                  className="relative md:right-[-45px] accent-[#02343F]"
+                  className="relative md:right-[-45px] accent-primary"
                   checked={preferences.sms === "Y"}
                   onChange={handleCheckboxChange}
                 />
@@ -194,14 +194,14 @@ const ContactForm = () => {
         <input
           id="selectAll"
           type="checkbox"
-          className="w-6 h-6 accent-[#02343F] align-middle border-2 border-black"
+          className="w-6 h-6 accent-primary align-middle border-2 border-black"
           onChange={handleSelectAll}
           checked={preferences.selectAll}
 
           />
         <label
           htmlFor="selectAll"
-          className="ms-2 text-md font-medium text-[#02343F]"
+          className="ms-2 text-md font-medium text-primary"
         >
          Select All Mode Of Communication
         </label>

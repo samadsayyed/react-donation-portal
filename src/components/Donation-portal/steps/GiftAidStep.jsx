@@ -42,10 +42,10 @@ const GiftAid = () => {
   return (
     <>
     <div className="md:p-8 rounded-lg max-w-3xl text-center pb-4">
-      <h1 className="text-2xl font-bold mb-4 text-[#02343F]">
+      <h1 className="text-2xl font-bold mb-4 text-primary">
         Increase The Value Of Your Donation With Gift Aid
       </h1>
-      <div className="mb-4 bg-[#02343F] text-white max-w-xl mx-auto py-4">
+      <div className="mb-4 bg-primary text-white max-w-xl mx-auto py-4">
         <input
           id="teal-checkbox"
           type="checkbox"
@@ -70,7 +70,7 @@ const GiftAid = () => {
       </div>
       <p className="text-lg font-medium mb-4">
         If you are a UK taxpayer the value of your gift can increase by <br />
-        <span className="text-[#02343F] font-bold">
+        <span className="text-primary font-bold">
           25% at no extra cost to you!
         </span>
       </p>

@@ -252,7 +252,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
           className="flex justify-center items-center"
         >
           <div className="rounded-lg md:p-8 px-2 w-full max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6 text-center text-[#02343F]">
+            <h2 className="text-2xl font-bold mb-6 text-center text-primary">
               Enter Your Personal Details
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -356,7 +356,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
               setCurrentStep={setCurrentStep}
             />
             <hr className="border-t border-black md:mx-[-40px] my-4" />
-            <h2 className="text-2xl font-bold mb-6 text-center text-[#02343F]">
+            <h2 className="text-2xl font-bold mb-6 text-center text-primary">
               Select Payment Method
             </h2>
             <div className="container mx-auto md:p-6">
@@ -404,7 +404,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
         </button>
               <button
                 type="submit"
-                className="px-4 py-2 rounded bg-[#02343F] text-white hover:bg-[#02343fc5] "
+                className="px-4 py-2 rounded bg-primary text-white hover:bg-[#02343fc5] "
               >
                 Proceed To Payment
               </button>

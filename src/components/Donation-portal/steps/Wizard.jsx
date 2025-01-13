@@ -113,7 +113,7 @@ const Wizard = () => {
           className={`px-4 py-2 rounded ${
             currentStep === steps.length
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-[#02343F] text-white hover:bg-[#02343fc5]"
+              : "bg-primary text-white hover:bg-[#02343fc5]"
           }`}
         >
           Next
@@ -136,7 +136,7 @@ const Wizard = () => {
                 <div
                   className={`step-circle w-12 h-12 rounded-full flex items-center justify-center font-semibold text-sm relative z-10 transition-colors duration-300 ${
                     step.number === currentStep
-                      ? "bg-[#02343F] text-white"
+                      ? "bg-primary text-white"
                       : "bg-white text-gray-400 border-2 border-gray-200"
                   }`}
                 >

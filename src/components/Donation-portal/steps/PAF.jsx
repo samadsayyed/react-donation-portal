@@ -174,7 +174,7 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
 
   return (
     <>
-      <h2 className="text-2xl font-bold mb-6 text-center text-[#02343F]">
+      <h2 className="text-2xl font-bold mb-6 text-center text-primary">
         Enter Your Address
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -232,7 +232,7 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
                     }
                   }}
                   type="button"
-                  className="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-e-md border border-transparent bg-[#02343F] text-white hover:bg-[#02343fa2] focus:outline-none"
+                  className="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-e-md border border-transparent bg-primary text-white hover:bg-[#02343fa2] focus:outline-none"
                   // disabled={!selectedCountry}
                 >
                   PAF
@@ -296,7 +296,7 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg md:py-8 px-2 pb-2 md:pt-0 md:w-full w-5/6 max-w-4xl text-center">
-            <h2 className="text-2xl font-bold mb-4 bg-[#02343F] text-white py-4 px-4 rounded-t-md flex items-center justify-between mx-[-9px]">
+            <h2 className="text-2xl font-bold mb-4 bg-primary text-white py-4 px-4 rounded-t-md flex items-center justify-between mx-[-9px]">
               <span>New Address</span>
               <button onClick={closeModal} className="ml-auto">
                 <svg
@@ -401,7 +401,7 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
                         <td className="border px-4 py-2">
                           <button
                             onClick={() => updateAddress(item)}
-                            className="rounded-xl p-2 bg-[#02343F] text-white"
+                            className="rounded-xl p-2 bg-primary text-white"
                           >
                             SELECT
                           </button>
@@ -425,7 +425,7 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
                 onClick={() => {
                   closeModal();
                 }}
-                className="bg-[#02343F] text-white px-4 py-2 rounded font-bold text-lg"
+                className="bg-primary text-white px-4 py-2 rounded font-bold text-lg"
               >
                 Enter Address Manually
               </button>

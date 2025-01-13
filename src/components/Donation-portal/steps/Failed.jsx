@@ -18,7 +18,7 @@ const Failed = () => {
 
         <p className="text-gray-700 mb-6">Order #SO-{referenceId}</p>
 
-        <button className="bg-[#02343F] hover:bg-[#02343fd9] text-white font-bold py-2 px-4 rounded w-full">
+        <button className="bg-primary hover:bg-[#02343fd9] text-white font-bold py-2 px-4 rounded w-full">
           <Link to="/" className="text-white">
             Return Home
           </Link>
