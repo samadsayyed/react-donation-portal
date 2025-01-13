@@ -104,9 +104,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const updateTransaction = async (refId ,updatedFormData) => {
     // Generate session ID
     const sessionId = generateSessionId();
-
-    // Initialize default values
-    let giftaidValue = "N";
     let contactPrefs = {
       email: "N",
       phone: "N",
@@ -114,9 +111,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       sms: "N",
     };
 
+    // Initialize default values
+    let giftaidValue = "N";
+
     // Get giftaid information from localStorage
+    let giftaidData = localStorage.getItem("giftaidclaim");
     try {
-      const giftaidData = localStorage.getItem("giftaidclaim");
       if (giftaidData) {
         const { value } = JSON.parse(giftaidData);
         giftaidValue = value? value: "N";
@@ -140,7 +140,8 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     } catch (error) {
       console.error("Error parsing contact preferences:", error);
     }
-
+    console.log(giftaidValue,"giftaidValue");
+    
     // Create and populate FormData
     const form_Data = new FormData();
     form_Data.append("auth", 0);
@@ -148,7 +149,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     form_Data.append("reference_no", refId);
     form_Data.append("guest_details", JSON.stringify(updatedFormData));
     form_Data.append("payment_method", formData.paywith);
-    // form_Data.append("is_giftaid", giftaidValue);
+    form_Data.append("claim_donation","Y" );
     form_Data.append("tele_calling", contactPrefs.phone);
     form_Data.append("send_email", contactPrefs.email);
     form_Data.append("send_mail", contactPrefs.post);
@@ -200,6 +201,12 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       city_name: document.getElementById("city")?.value || NewCity,
       country: String(document.getElementById("countries").value),
     };
+
+    const phoneNumberPattern = /^[0-9]{11}$/; // Adjust the pattern as per your requirements
+    if (!phoneNumberPattern.test(formData.phone)) {
+      alert("Please enter a valid 10-digit phone number.");
+      return; // Stop form submission if validation fails
+    }
 
     setFormData(updatedFormData);
 
@@ -349,7 +356,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
             </h2>
             <div className="container mx-auto md:p-6">
               <div className="grid grid-cols-3 gap-6">
-                {["stripe", "worldpay", "paypal"].map((paymentMethod) => (
+                {["stripe"].map((paymentMethod,index, arr) => (
                   <div
                     key={paymentMethod}
                     className={`flex items-center flex-col bg-gray-50 border `}
@@ -361,6 +368,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                       className="relative md:right-[-80px] top-2"
                       onChange={handlePaymentSelection}
                       required
+                      checked={arr.length == 1}
                     />
                     <label
                       htmlFor={paymentMethod}
@@ -377,7 +385,18 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
               </div>
             </div>
 
-            <div className="text-center mt-6">
+            <div className="flex justify-between">
+            <button
+          onClick={() => setCurrentStep(currentStep - 1)}
+          disabled={currentStep === 1}
+          className={`px-4 py-2 rounded ${
+            currentStep === 1
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
+        >
+          Previous
+        </button>
               <button
                 type="submit"
                 className="px-4 py-2 rounded bg-[#02343F] text-white hover:bg-[#02343fc5] "

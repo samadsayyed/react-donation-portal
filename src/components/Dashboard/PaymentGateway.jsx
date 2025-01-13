@@ -74,13 +74,17 @@ const PaymentForm = ({
     try {
       // Create payment intent
       const createIntentResponse = await axios.post(
-        "https://node-donation-portal.onrender.com/create-payment-intent",
-        { amount: cartItems
+        "https://icharms.mysadaqahonline.com/api/v1/payment/stripe/paymentIntent",
+        {
+          amount: cartItems
             .reduce(
               (total, item) => total + item.donation_amount * item.quantity,
               0
             )
-            .toFixed(2) * 100 }, // £100.00 in pence
+            .toFixed(2) * 100,
+          // reference_id: "12344"
+          reference_id: reference_no
+        }, // £100.00 in pence
         {
           headers: {
             Authorization: `Bearer ${apiToken}`,
@@ -91,16 +95,16 @@ const PaymentForm = ({
 
       const { clientSecret } = createIntentResponse.data;
       console.log(reference_no, "reference_no");
-      
+
       const { error: confirmError, paymentIntent } =
         await stripe.confirmCardPayment(clientSecret, {
           payment_method: paymentMethod.id,
           receipt_email: email,
-          reference_no: reference_no
+          // reference_no: reference_no
         });
 
 
-      
+
 
       if (confirmError) {
         setError(confirmError.message);
@@ -120,13 +124,13 @@ const PaymentForm = ({
           auth_code: "",
           // donor_id: "donor_12345", // Replace with actual donor ID
           reference_no: reference_no, // Replace with actual reference
-          // notes: "Food Packs donation for Pakistan",
+          // notes: "Food Packs donation for Pakistan", 
           auth: 0,
           session_id: JSON.parse(localStorage.getItem("sessionIdData"))?.sessionId,
         };
 
         console.log(donationData, "donationData");
-        
+
 
         const donationResponse = await axios.post(
           `${import.meta.env.VITE_ICHARMS_URL}payment/create-single-donation`,
@@ -138,15 +142,10 @@ const PaymentForm = ({
             }
           }
         );
-        console.log(donationResponse,"donationResponse");
+        console.log(donationResponse, "donationResponse");
         onPaymentSuccess(paymentIntent);
         setIsSuccess(true);
         setCurrentStep(4);
-        // if (donationResponse.data.success) {
-          
-        // } else {
-        //   setIsSuccess(false);
-        // }
       } else {
         setError("Payment failed. Please try again.");
         setIsSuccess(false);
@@ -201,9 +200,8 @@ const PaymentForm = ({
 
   return (
     <div
-      className={`h-[100vh] fixed top-0 left-0 z-50 ${
-        isPaymentGatewayOpen ? "block" : "hidden"
-      }   w-full bg-black overflow-hidden`}
+      className={`h-[100vh] fixed top-0 left-0 z-50 ${isPaymentGatewayOpen ? "block" : "hidden"
+        }   w-full bg-black overflow-hidden`}
     >
       <div className="grid md:grid-cols-2 h-full">
         {/* Left Section */}
@@ -223,7 +221,7 @@ const PaymentForm = ({
           <div className="flex-grow flex flex-col justify-center text-white">
             {/* <h2 className="text-lg font-normal mb-2">Food Packs</h2> */}
             <div className="text-4xl md:text-4xl lg:text-6xl font-bold mb-4">
-                Total Amount {" "}
+              Total Amount {" "}
               {cartItems
                 .reduce(
                   (total, item) => total + item.donation_amount * item.quantity,
