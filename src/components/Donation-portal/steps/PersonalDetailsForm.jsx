@@ -158,7 +158,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     form_Data.append("send_email", contactPrefs.email);
     form_Data.append("send_mail", contactPrefs.post);
     form_Data.append("send_text", contactPrefs.sms);
-    form_Data.append("client_id", 7);
+    form_Data.append("client_id", 1);
     try {
       const response = await axios.post(
         `${apiUrl}payment/transaction`,
