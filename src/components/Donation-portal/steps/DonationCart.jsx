@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "../../../index.css";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useAppContext } from "../../AppContext";
 
 const DonationCart = ({setCurrentStep}) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const {refetch, setRefetch} = useAppContext()
 
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
@@ -72,6 +76,9 @@ const DonationCart = ({setCurrentStep}) => {
     } else {
       removeCartItem(cartId);
     }
+
+setRefetch(!refetch)
+
   };
   const removeCartItem = async (cartId) => {
     console.log("Removing item with ID:", cartId);
@@ -156,7 +163,7 @@ const DonationCart = ({setCurrentStep}) => {
     try {
       // Input validation
       if (!cartItems?.length) {
-        alert("No cart items found");
+        toast.error("No cart items found");
         return;
       }
   
@@ -184,7 +191,7 @@ const DonationCart = ({setCurrentStep}) => {
       // Validate all items have names
       const missingNames = cartData.find(item => !item.participant_name);
       if (missingNames) {
-        alert("Please enter plaque names for all items!");
+        toast.error("Please enter plaque names for all items!");
         return;
       }
   
@@ -219,7 +226,7 @@ const DonationCart = ({setCurrentStep}) => {
   
     } catch (err) {
       console.error("Error updating participant names:", err);
-      alert(`Error: ${err.message}`);
+      toast.error(`Error: ${err.message}`);
       setError(err.message);
     }
   };
@@ -330,7 +337,7 @@ const DonationCart = ({setCurrentStep}) => {
           </div>
           <div className="flex justify-evenly mt-6">
             <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded">
-              <a href="/donation-portal">Add Another Program</a>
+              <Link to="/donation-portal">Add Another Program</Link>
             </button>
             <button
               onClick={updateParticipantNames}

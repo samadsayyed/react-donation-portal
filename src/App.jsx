@@ -4,6 +4,7 @@ import Checkout from './pages/donation-portal/checkout';
 import Test from './pages/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppProvider } from './components/AppContext';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const queryClient = new QueryClient();
@@ -13,6 +14,7 @@ function App() {
       {/* Wrap the entire app with the AppProvider */}
       <AppProvider>
         <Router>
+          <Toaster/>
           <Routes>
             {/* <Route path="/" element={<DonationHome />}></Route> */}
             <Route path="/" element={<Navigate   to="/donation-portal" />} />

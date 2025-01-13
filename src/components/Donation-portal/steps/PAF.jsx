@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import "../../../../index.css";
 import CountrySelector from "./CountrySelector.jsx";
+import toast from "react-hot-toast";
 
 const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
   const [countries, setCountries] = useState([]);
@@ -212,7 +213,7 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
                       fetchPafCode(postCode);
                       setIsOpen(true);
                     } else {
-                      alert("Please enter a valid Post Code.");
+                      toast.error("Please enter a valid Post Code.");
                     }
                   }}
                   type="button"
@@ -399,11 +400,11 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
                 </table>
               </div>
 
-              <div className="flex justify-center items-center mt-4">
+              {/* <div className="flex justify-center items-center mt-4">
                 <div className="flex items-center">
                   <span>Showing 1 to {filteredData.length} entries</span>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Modal Buttons */}
@@ -412,19 +413,19 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
                 onClick={() => {
                   closeModal();
                 }}
-                className="bg-[#02343F] text-white px-4 py-2 rounded font-bold text-xl"
+                className="bg-[#02343F] text-white px-4 py-2 rounded font-bold text-lg"
               >
                 Enter Address Manually
               </button>
             </div>
-            <div className="flex justify-center space-x-4 mt-4">
+            {/* <div className="flex justify-center space-x-4 mt-4">
               <button
                 onClick={closeModal}
                 className="bg-red-500 text-white px-4 py-2 rounded"
               >
                 Close
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       )}

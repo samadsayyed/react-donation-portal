@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { lazy, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import PAFModal from "./PAF";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
-import PaymentForm from "../../Dashboard/PaymentGateway";
+// import PaymentForm from "../../Dashboard/PaymentGateway";
+const PaymentForm = lazy(() => import("../../Dashboard/PaymentGateway"));
+
+
 import {
   Elements,
   CardElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import toast from "react-hot-toast";
 
 const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const stripePromise = loadStripe(
@@ -154,6 +158,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     form_Data.append("send_email", contactPrefs.email);
     form_Data.append("send_mail", contactPrefs.post);
     form_Data.append("send_text", contactPrefs.sms);
+    form_Data.append("client_id", 7);
     try {
       const response = await axios.post(
         `${apiUrl}payment/transaction`,
@@ -204,7 +209,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
     const phoneNumberPattern = /^[0-9]{11}$/; // Adjust the pattern as per your requirements
     if (!phoneNumberPattern.test(formData.phone)) {
-      alert("Please enter a valid 10-digit phone number.");
+      toast.error("Please enter a valid 11-digit phone number.");
       return; // Stop form submission if validation fails
     }
 

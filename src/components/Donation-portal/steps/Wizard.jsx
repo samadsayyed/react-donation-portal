@@ -125,12 +125,7 @@ const Wizard = () => {
   return (
     <Elements stripe={stripePromise}>
       <div className="w-full py-20 max-w-3xl mx-auto px-2 md:px-0">
-        <div className="relative mb-12">
-          <div
-            id="progress-bar"
-            className="absolute transition-all duration-300"
-          ></div>
-
+        <div className="relative mb-6">
           <div className="relative flex justify-between">
             {steps.map((step) => step.number !== 4 && (
               <div 

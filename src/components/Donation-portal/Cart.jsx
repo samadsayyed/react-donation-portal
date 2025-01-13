@@ -293,11 +293,11 @@ const CartData = () => {
                       .toFixed(2)}
                   </span>
                 </div>
-                <Link to={"/donation-portal/checkout"}>
+                {cartItems.length > 0 && <Link to={"/donation-portal/checkout"} >
                   <button className="w-full bg-teal-900 text-white py-3 rounded-md hover:bg-teal-800">
                     Proceed to Checkout
                   </button>
-                </Link>
+                </Link>}
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
+import { useAppContext } from "../AppContext";
 
 const PaymentForm = ({
   onRequestClose,
@@ -19,6 +20,7 @@ const PaymentForm = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // console.log(cartItems);
+    const {refetch, setRefetch} = useAppContext()
 
   const generateSessionId = () => {
     const existingSessionData = localStorage.getItem("sessionIdData");
@@ -103,9 +105,6 @@ const PaymentForm = ({
           // reference_no: reference_no
         });
 
-
-
-
       if (confirmError) {
         setError(confirmError.message);
         setLoading(false);
@@ -128,9 +127,6 @@ const PaymentForm = ({
           auth: 0,
           session_id: JSON.parse(localStorage.getItem("sessionIdData"))?.sessionId,
         };
-
-        console.log(donationData, "donationData");
-
 
         const donationResponse = await axios.post(
           `${import.meta.env.VITE_ICHARMS_URL}payment/create-single-donation`,
@@ -196,7 +192,7 @@ const PaymentForm = ({
     // console.log("PaymentForm mounted");
 
     fetchCart();
-  }, []);
+  }, [refetch]);
 
   return (
     <div
