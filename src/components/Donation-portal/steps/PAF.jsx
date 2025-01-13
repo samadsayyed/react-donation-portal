@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import "../../../../index.css";
-import CountrySelector from "./CountrySelector.jsx";
 
-const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
+const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -15,7 +14,6 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
   const [showPafButton, setShowPafButton] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-
   // console.log(addCity, "add city");
 
   const closeModal = () => setIsOpen(false);
@@ -26,7 +24,6 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
 
   useEffect(() => {
     const fetchCountry = async () => {
-      
       try {
         if (!apiUrl || !apiToken) {
           throw new Error("API URL or token is not defined");
@@ -45,11 +42,11 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
 
         const data = await response.json();
         console.log(data.data);
-        
+
         setCountries(data.data || []);
       } catch (err) {
-        console.log("err",err);
-        
+        console.log("err", err);
+
         setError(err.message);
       }
     };
@@ -180,11 +177,29 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
         Enter Your Address
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <CountrySelector
-          countries={countries}
-          selectedCountry={selectedCountry}
-          onChange={handleCountryChange}
-        />
+        <div className="w-full">
+          <label
+            htmlFor="countries"
+            className="block text-gray-700 font-bold mb-2"
+          >
+            Select a Country
+          </label>
+          <select
+            id="countries"
+            value={selectedCountry}
+            onChange={handleCountryChange}
+            className="border-gray-300 rounded py-3 px-2 border shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full"
+          >
+            <option value="" disabled>
+              {countries.length === 0 ? "Loading..." : "Select a country"}
+            </option>
+            {countries.map((country) => (
+              <option key={country.country_id} value={country.country_id}>
+                {country.country_name}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div className="w-full">
           <label
@@ -230,33 +245,31 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
           <label htmlFor="city" className="block text-gray-700 font-bold mb-2">
             City
           </label>
-          {
-            addCity?(
-              <div className=" flex gap-3">
+          {addCity ? (
+            <div className=" flex gap-3">
               <input
-              type="text"
-              id="firstName"
-              placeholder="Add a new city"
+                type="text"
+                id="firstName"
+                placeholder="Add a new city"
+                className="border-gray-300 rounded py-3 px-2 border shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full"
+                required
+                onChange={(e) => setNewCity(e.target.value)}
+              />
+            </div>
+          ) : (
+            <select
+              id="city"
+              name="city"
+              onChange={(e) => {
+                const countryId = e.target.value;
+                if (e.target.value == "add-city") {
+                  setAddCity(true);
+                }
+                console.log("Selected Country:", e.target.value);
+              }}
               className="border-gray-300 rounded py-3 px-2 border shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full"
-              required
-              onChange={(e)=>setNewCity(e.target.value)}
-            />
-            
-              </div>
-            ):( 
-          <select
-            id="city"
-            name="city"
-            onChange={(e) => {
-              const countryId = e.target.value;
-              if (e.target.value == "add-city") {
-                setAddCity(true);
-              }
-              console.log("Selected Country:", e.target.value);
-            }}
-            className="border-gray-300 rounded py-3 px-2 border shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full"
-            disabled={!selectedCountry || loading}
-          >
+              disabled={!selectedCountry || loading}
+            >
               <>
                 <option value="" disabled>
                   {loading
@@ -274,9 +287,8 @@ const PAFModal = ({addCity, setAddCity,NewCity, setNewCity}) => {
                   </option>
                 ))}
               </>
-          </select>
-            )
-          }
+            </select>
+          )}
         </div>
       </div>
 
