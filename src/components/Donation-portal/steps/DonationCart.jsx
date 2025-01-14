@@ -150,7 +150,7 @@ setRefetch(!refetch)
       //   alert("Plaque names already updated for this item");
       //   return false;
       // }
-  
+      // toast.success("Plaque names updated successfully");
       return true;
   
     } catch (err) {
@@ -209,10 +209,11 @@ setRefetch(!refetch)
           break;
         }
       }
+
+      toast.success("Plaque names updated successfully");
   
       // Only proceed if all updates were successful
       if (allUpdatesSuccessful) {
-        // alert("All plaque names updated successfully");
         // Safely update step
         setCurrentStep(prevStep => {
           try {
