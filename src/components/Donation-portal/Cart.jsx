@@ -3,7 +3,6 @@ import "../../index.css";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../AppContext";
 
-
 const CartData = () => {
   const { cartCount, setCartCount } = useAppContext();
   const [isCartVisible, setIsCartVisible] = useState(false);
@@ -67,9 +66,9 @@ const CartData = () => {
   const toggleCartVisibility = () => {
     const newVisibility = !isCartVisible;
     setIsCartVisible(newVisibility);
-      if (newVisibility) {
+    if (newVisibility) {
       console.log("Opening cart...", newVisibility);
-      fetchCart(); 
+      fetchCart();
     }
   };
   const removeCartItem = async (cartId) => {
@@ -87,7 +86,7 @@ const CartData = () => {
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-      setCartCount(prevCount => Math.max(0, prevCount - 1));      
+      setCartCount((prevCount) => Math.max(0, prevCount - 1));
       fetchCart();
     } catch (err) {
       setError(err.message);
@@ -196,7 +195,16 @@ const CartData = () => {
               </div>
 
               <div className="flex-1 overflow-y-auto p-4">
-                {loading && <div>Loading...</div>}
+                {loading && (
+                  [1,2,3].map((item) => (
+                  <div key={item} className="relative flex w-64 animate-pulse gap-2 p-4">
+                    <div className="h-12 w-12 rounded bg-slate-400"></div>
+                    <div className="flex-1">
+                      <div className="mb-1 h-5 w-4/5 rounded-lg bg-slate-400 text-lg"></div>
+                      <div className="h-5 w-2/5 rounded-lg bg-slate-400 text-sm"></div>
+                    </div>
+                  </div>))
+                )}
                 {error && (
                   <div className="text-red-600 text-center">Error: {error}</div>
                 )}
@@ -293,11 +301,13 @@ const CartData = () => {
                       .toFixed(2)}
                   </span>
                 </div>
-                {cartItems.length > 0 && <Link to={"/donation-portal/checkout"} >
-                  <button className="w-full bg-teal-900 text-white py-3 rounded-md hover:bg-teal-800">
-                    Proceed to Checkout
-                  </button>
-                </Link>}
+                {cartItems.length > 0 && (
+                  <Link to={"/donation-portal/checkout"}>
+                    <button className="w-full bg-teal-900 text-white py-3 rounded-md hover:bg-teal-800">
+                      Proceed to Checkout
+                    </button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

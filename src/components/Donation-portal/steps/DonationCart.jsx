@@ -191,7 +191,7 @@ setRefetch(!refetch)
       // Validate all items have names
       const missingNames = cartData.find(item => !item.participant_name);
       if (missingNames) {
-        toast.error("Please enter plaque names for all items!");
+        toast.error("Please enter plaque names for all programs!");
         return;
       }
   
@@ -247,7 +247,34 @@ setRefetch(!refetch)
           Error: {error}
         </div>
       ) : loading ? (
-        <p className="text-center text-gray-600">Loading...</p>
+        <li className="relative flex flex-col gap-4 border border-gray-300 rounded-lg p-4">
+        {/* Top Section Skeleton */}
+        <div className="flex items-start gap-4">
+          {/* Image Skeleton */}
+          <div className="w-24 h-24 rounded-md bg-slate-400 animate-pulse" />
+          
+          {/* Details Skeleton */}
+          <div className="flex-1">
+            <div className="h-6 w-4/5 rounded-lg bg-slate-400 mb-2 animate-pulse" />
+            <div className="h-5 w-3/5 rounded-lg bg-slate-400 mb-2 animate-pulse" />
+            <div className="h-5 w-2/5 rounded-lg bg-slate-400 animate-pulse" />
+          </div>
+        </div>
+      
+        {/* Quantity Controls Section Skeleton */}
+        <div className="flex items-center mb-4">
+          {/* Toggle Section Skeleton */}
+          <div className="flex items-center w-2/5 justify-center">
+            <div className="h-5 w-4/5 rounded-lg bg-slate-400 animate-pulse" />
+          </div>
+      
+          {/* Input Field Skeleton */}
+          <div className="ml-4 h-10 w-3/5 rounded bg-slate-400 animate-pulse" />
+      
+          {/* Delete Button Skeleton */}
+          <div className="ml-2 h-8 w-8 rounded bg-slate-400 animate-pulse" />
+        </div>
+      </li>
       ) : cartItems.length > 0 ? (
         <ul id="cart" className="space-y-4">
           {cartItems.map((item) => (
@@ -292,7 +319,7 @@ setRefetch(!refetch)
                           data-cart-quantity={item.quantity}
                           className="sr-only peer plaque-input"
                         />
-                        <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
+                        <div className="relative w-11 h-6  rounded-full peer bg-gray-200 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
                       </label>
                     </div>
 
@@ -346,7 +373,7 @@ setRefetch(!refetch)
                 cartItems.map((item) => item.cart_id)
               )}
         
-              className="bg-teal-600 text-white px-4 py-2 rounded"
+              className="bg-primary text-white px-4 py-2 rounded"
             >
               Proceed
             </button>
