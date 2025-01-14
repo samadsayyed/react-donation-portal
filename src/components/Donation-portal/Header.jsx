@@ -17,7 +17,7 @@ const Header = () => {
             href="/"
             aria-label="Preline"
           >
-            <img className="h-8" src="/logo_sadaqah-2.png" alt="Blog Logo" />
+            <img className="h-8" src="/assets/images/logo_sadaqah-2.png" alt="Blog Logo" />
           </a>
 
           {/* Collapse Button */}

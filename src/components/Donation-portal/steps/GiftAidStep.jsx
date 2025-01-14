@@ -62,7 +62,7 @@ const GiftAid = () => {
       <div className="flex items-center justify-center mb-4">
         <div className="flex items-center">
           <img
-            src="/gift-aid-step.png"
+            src="/assets/images/gift-aid-step.png"
             alt="Donation Bag"
             className="w-full h-full mr-2"
           />

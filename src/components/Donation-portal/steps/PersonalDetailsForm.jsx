@@ -380,7 +380,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
                       className="flex flex-col items-center space-y-2 cursor-pointer"
                     >
                       <img
-                        src={`/${paymentMethod}.svg`}
+                        src={`/assets/svg/${paymentMethod}.svg`}
                         alt={`${paymentMethod} logo`}
                         className="w-[100px] h-[100px]"
                       />

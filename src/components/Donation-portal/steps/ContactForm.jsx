@@ -108,7 +108,7 @@ const ContactForm = () => {
                   className="flex flex-col items-center space-y-2 cursor-pointer px-2 text-center"
                 >
                   <img
-                    src="/mail.svg"
+                    src="/assets/svg/mail.svg"
                     alt=""
                     className="md:w-[75px] md:h-[75px] w-[25px] h-[25px]"
                   />
@@ -132,7 +132,7 @@ const ContactForm = () => {
                   className="flex flex-col items-center space-y-2 cursor-pointer px-2 text-center"
                 >
                   <img
-                    src="/phone.svg"
+                    src="/assets/svg/phone.svg"
                     alt=""
                     className="md:w-[75px] md:h-[75px] w-[25px] h-[25px]"
                   />
@@ -156,7 +156,7 @@ const ContactForm = () => {
                   className="flex flex-col items-center space-y-2 cursor-pointer px-2 text-center"
                 >
                   <img
-                    src="/post.svg"
+                    src="/assets/svg/post.svg"
                     alt=""
                     className="md:w-[75px] md:h-[75px] w-[25px] h-[25px]"
                   />
@@ -180,7 +180,7 @@ const ContactForm = () => {
                   className="flex flex-col items-center space-y-2 cursor-pointer px-2 text-center"
                 >
                   <img
-                    src="/sms.svg"
+                    src="/assets/svg/sms.svg"
                     alt=""
                     className="md:w-[75px] md:h-[75px] w-[25px] h-[25px]"
                   />

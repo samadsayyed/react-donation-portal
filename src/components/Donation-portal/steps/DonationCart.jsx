@@ -191,7 +191,7 @@ setRefetch(!refetch)
       // Validate all items have names
       const missingNames = cartData.find(item => !item.participant_name);
       if (missingNames) {
-        toast.error("Please enter plaque names for all items!");
+        toast.error("Please enter plaque names for all programs!");
         return;
       }
   

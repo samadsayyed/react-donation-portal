@@ -69,7 +69,7 @@ const Footer = () => {
 
       <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex justify-center text-teal-600">
-          <img className="h-auto" src="/logo_sadaqah.png" alt="Blog Image" />
+          <img className="h-auto" src="/assets/images/logo_sadaqah.png" alt="Blog Image" />
         </div>
 
         <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
@@ -120,7 +120,7 @@ const Footer = () => {
 
       <div className="flex justify-center mx-auto max-w-screen-2xl px-4 py-5 sm:px-6 lg:px-8 ">
         <div className="w-1/6">
-          <img className="h-auto" src="/RegLogo.webp" alt="Blog Image" />
+          <img className="h-auto" src="/assets/images/RegLogo.webp" alt="Blog Image" />
         </div>
         <div className="max-w-5xl">
           <p className="text-white">
