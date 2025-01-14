@@ -246,7 +246,34 @@ setRefetch(!refetch)
           Error: {error}
         </div>
       ) : loading ? (
-        <p className="text-center text-gray-600">Loading...</p>
+        <li className="relative flex flex-col gap-4 border border-gray-300 rounded-lg p-4">
+        {/* Top Section Skeleton */}
+        <div className="flex items-start gap-4">
+          {/* Image Skeleton */}
+          <div className="w-24 h-24 rounded-md bg-slate-400 animate-pulse" />
+          
+          {/* Details Skeleton */}
+          <div className="flex-1">
+            <div className="h-6 w-4/5 rounded-lg bg-slate-400 mb-2 animate-pulse" />
+            <div className="h-5 w-3/5 rounded-lg bg-slate-400 mb-2 animate-pulse" />
+            <div className="h-5 w-2/5 rounded-lg bg-slate-400 animate-pulse" />
+          </div>
+        </div>
+      
+        {/* Quantity Controls Section Skeleton */}
+        <div className="flex items-center mb-4">
+          {/* Toggle Section Skeleton */}
+          <div className="flex items-center w-2/5 justify-center">
+            <div className="h-5 w-4/5 rounded-lg bg-slate-400 animate-pulse" />
+          </div>
+      
+          {/* Input Field Skeleton */}
+          <div className="ml-4 h-10 w-3/5 rounded bg-slate-400 animate-pulse" />
+      
+          {/* Delete Button Skeleton */}
+          <div className="ml-2 h-8 w-8 rounded bg-slate-400 animate-pulse" />
+        </div>
+      </li>
       ) : cartItems.length > 0 ? (
         <ul id="cart" className="space-y-4">
           {cartItems.map((item) => (
