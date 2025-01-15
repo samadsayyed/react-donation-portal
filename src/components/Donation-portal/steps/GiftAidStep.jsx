@@ -45,19 +45,27 @@ const GiftAid = () => {
       <h1 className="text-2xl font-bold mb-4 text-primary">
         Increase The Value Of Your Donation With Gift Aid
       </h1>
-      <div className="mb-4 bg-primary text-white max-w-xl mx-auto py-4">
+      <div className="mb-4 bg-primary text-white max-w-xl mx-auto py-4 rounded ">
+      <p className="text-lg font-medium mb-4">
+        If you are a UK taxpayer the value of your gift can increase by <br />
+        <span className="text-white font-bold">
+          25% at no extra cost to you!
+        </span>
+      </p>
+      <div className=" bg-secondary text-primary mb-4  max-w-md mx-auto py-4 hover:scale-105 transition-transform duration-100 rounded">
         <input
           id="teal-checkbox"
           type="checkbox"
-          className="w-6 h-6 accent-white align-middle"
+          className="w-6 h-6 accent-white align-middle cursor-pointer"
           onChange={updateLocalStorageWithExpiry}
         />
         <label
           htmlFor="teal-checkbox"
-          className="ms-2 text-md font-medium text-white"
+          className="ms-2 text-lg font-bold "
         >
           Claim Gift Aid on my donation
         </label>
+        </div>
       </div>
       <div className="flex items-center justify-center mb-4">
         <div className="flex items-center">
@@ -68,12 +76,7 @@ const GiftAid = () => {
           />
         </div>
       </div>
-      <p className="text-lg font-medium mb-4">
-        If you are a UK taxpayer the value of your gift can increase by <br />
-        <span className="text-primary font-bold">
-          25% at no extra cost to you!
-        </span>
-      </p>
+    
     
       <p className="text-sm text-gray-600 mb-2 text-justify max-w-2xl">
         I am a UK taxpayer and I understand that if I pay less Income and/or

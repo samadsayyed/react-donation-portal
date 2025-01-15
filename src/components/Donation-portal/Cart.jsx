@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../index.css";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../AppContext";
+import toast from "react-hot-toast";
 
 const CartData = () => {
   const { cartCount, setCartCount } = useAppContext();
@@ -86,6 +87,20 @@ const CartData = () => {
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
+      const successSound = new Audio('/assets/remove-audio.mp3');
+successSound.volume = 0.5;
+successSound.play()
+    .then(() => {
+        toast("Program removed");
+        setTimeout(() => {
+            successSound.pause();
+            successSound.currentTime = 0;
+        }, 800);
+    })
+    .catch(err => {
+        console.warn('Failed to play success sound:', err);
+        toast.success("Program added successfully");
+    });
       setCartCount((prevCount) => Math.max(0, prevCount - 1));
       fetchCart();
     } catch (err) {

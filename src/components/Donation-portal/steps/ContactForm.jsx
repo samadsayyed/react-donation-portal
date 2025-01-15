@@ -194,7 +194,7 @@ const ContactForm = () => {
         <input
           id="selectAll"
           type="checkbox"
-          className="w-6 h-6 accent-primary align-middle border-2 border-black"
+          className="w-6 h-6 accent-primary align-middle border-2 border-black cursor-pointer"
           onChange={handleSelectAll}
           checked={preferences.selectAll}
 

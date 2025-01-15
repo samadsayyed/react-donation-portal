@@ -95,7 +95,20 @@ setRefetch(!refetch)
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-
+      const successSound = new Audio('/assets/remove-audio.mp3');
+      successSound.volume = 0.5;
+      successSound.play()
+          .then(() => {
+              toast("Program removed");
+              setTimeout(() => {
+                  successSound.pause();
+                  successSound.currentTime = 0;
+              }, 800);
+          })
+          .catch(err => {
+              console.warn('Failed to play success sound:', err);
+              toast.success("Program added successfully");
+          });
       fetchCart();
     } catch (err) {
       setError(err.message);

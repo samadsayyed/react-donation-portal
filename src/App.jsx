@@ -20,7 +20,7 @@ function App() {
           <Toaster/>
           <Routes>
             {/* <Route path="/" element={<DonationHome />}></Route> */}
-            <Route path="/" element={<Navigate   to="/donation-portal?samad=d" />} />
+            <Route path="/" element={<Navigate   to="/donation-portal" />} />
             <Route path="/donation-portal" element={<DonationHome />} />
             <Route path="/donation-portal/checkout" element={<Checkout/>} />
 
