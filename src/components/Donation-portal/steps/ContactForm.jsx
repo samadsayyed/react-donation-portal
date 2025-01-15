@@ -88,7 +88,7 @@ const ContactForm = () => {
           <div className="text-center mb-4">
             <p className="text-gray-700">
               Your support is making a life-saving impact. Stay connected and
-              informed with our latest updates.
+              informed with our latest updates <br /> by .
             </p>
           </div>
 
@@ -110,10 +110,10 @@ const ContactForm = () => {
                   <img
                     src="/assets/svg/mail.svg"
                     alt=""
-                    className="md:w-[75px] md:h-[75px] w-[25px] h-[25px]"
+                    className="md:w-[75px] md:h-[75px] w-[35px] h-[35px]"
                   />
                   <span className="text-sm font-medium">
-                    Send me updates by email
+                    Email
                   </span>
                 </label>
               </div>
@@ -134,10 +134,10 @@ const ContactForm = () => {
                   <img
                     src="/assets/svg/phone.svg"
                     alt=""
-                    className="md:w-[75px] md:h-[75px] w-[25px] h-[25px]"
+                    className="md:w-[75px] md:h-[75px] w-[35px] h-[35px]"
                   />
                   <span className="text-sm font-medium">
-                    Contact me by Phone
+                   Phone
                   </span>
                 </label>
               </div>
@@ -158,10 +158,10 @@ const ContactForm = () => {
                   <img
                     src="/assets/svg/post.svg"
                     alt=""
-                    className="md:w-[75px] md:h-[75px] w-[25px] h-[25px]"
+                    className="md:w-[75px] md:h-[75px] w-[35px] h-[35px]"
                   />
                   <span className="text-sm font-medium">
-                    Contact me by Post
+                    Post
                   </span>
                 </label>
               </div>
@@ -182,9 +182,9 @@ const ContactForm = () => {
                   <img
                     src="/assets/svg/sms.svg"
                     alt=""
-                    className="md:w-[75px] md:h-[75px] w-[25px] h-[25px]"
+                    className="md:w-[75px] md:h-[75px] w-[35px] h-[35px]"
                   />
-                  <span className="text-sm font-medium">Contact me by SMS</span>
+                  <span className="text-sm font-medium">SMS</span>
                 </label>
               </div>
             </div>

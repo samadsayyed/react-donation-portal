@@ -147,7 +147,7 @@ successSound.play()
 
   // Error and Loading States
   if (programsLoading) {
-    return    <div className="flex justify-center items-center top-1/2 absolute right-1/2">
+    return    <div className="flex justify-center items-center my-auto align-middle h-screen">
         <div className="flex-col gap-4 w-full flex items-center justify-center">
           <div className="relative w-16 h-16">
             <div className="absolute inset-0 border-4 border-gray-300 border-t-teal-900 rounded-full animate-spin"></div>
@@ -210,8 +210,7 @@ successSound.play()
 
                   <button
                     onClick={handleAddToCart}
-                    className="w-full bg-cream hover:bg-cream/90 text-teal-900 py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-xl"
-                    style={{ backgroundColor: "#F5E6D3" }}
+                    className="w-full bg-cream bg-secondary text-teal-900 py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-xl hover:bg-teal-900 hover:text-white hover:border border"
                     data-program-rate={program.program_rate}
                     data-program-id={program.program_id}
                     data-program-quantity={1}
