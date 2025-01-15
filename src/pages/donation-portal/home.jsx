@@ -166,7 +166,7 @@ successSound.play()
   return (
     <DonationPortalLayout>
       <CartData />
-      <div className="container mx-auto max-w-6xl px-4 py-20">
+      <div className="container mx-auto max-w-6xl py-20">
         <h1 className="text-3xl font-bold text-center mb-10 text-teal-900">
           Select Program
         </h1>

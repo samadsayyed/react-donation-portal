@@ -314,9 +314,9 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
               </button>
             </h2>
 
-            {/* <p className="pb-4">
+            <p className="pb-4">
               Click select button or double-click on an address to select
-            </p> */}
+            </p>
 
             {error && (
               <p className="text-red-500 mb-4 font-bold text-xl">
@@ -364,7 +364,7 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
                 </div>
               </div>
 
-              <div className="border rounded overflow-x-auto overflow-y-auto h-64 relative">
+              <div className="border rounded overflow-x-auto overflow-y-auto md:h-64 h-96 relative">
                 <table className="min-w-full table-auto mb-4">
                   <thead className="sticky top-0 bg-white z-10">
                     <tr>
@@ -380,7 +380,7 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
 
                   <tbody>
                     {filteredData.map((item, index) => (
-                      <tr key={index}>
+                      <tr key={index} onDoubleClick={() => updateAddress(item)}>
                         <td className="border px-4 py-2">
                           {(currentPage - 1) * rowsPerPage + index + 1}
                         </td>

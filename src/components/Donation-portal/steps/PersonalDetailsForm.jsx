@@ -359,7 +359,7 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
             <h2 className="text-2xl font-bold mb-6 text-center text-primary">
               Select Payment Method
             </h2>
-            <div className="container mx-auto md:p-6">
+            <div className="container mx-auto md:p-6 pb-6">
               <div className="grid grid-cols-3 gap-6">
                 {["stripe"].map((paymentMethod,index, arr) => (
                   <div
