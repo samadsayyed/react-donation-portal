@@ -81,7 +81,6 @@ setRefetch(!refetch)
 
   };
   const removeCartItem = async (cartId) => {
-    console.log("Removing item with ID:", cartId);
     try {
       const response = await fetch(`${apiUrl}cart/delete`, {
         method: "POST",

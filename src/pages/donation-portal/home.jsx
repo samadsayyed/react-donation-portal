@@ -66,18 +66,14 @@ const ProgramsList = () => {
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    console.log(queryParams.name, "fvf")
-    console.log(location.search, "ldkfvbdfklbv");
   }, []);
 
   // Fetch cart items
   const fetchCart = async () => {
-    // console.log("Fetching cart data...");
 
     const response = await axiosInstance.post("cart/cart", {
       session_id: sessionId,
     });
-    // console.log("Cart response:", response);
     return response.data.cart || [];
   };
 
@@ -86,8 +82,6 @@ const ProgramsList = () => {
     queryFn: fetchCart,
     // enabled: !!sessionId,
     onSuccess: (data) => {
-      console.log("Cart fetched successfully");
-      console.log(data, "Fetched cart data");
       setCartCount(data.length); // Assuming data is an array
     },
   });

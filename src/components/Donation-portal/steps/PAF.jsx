@@ -15,7 +15,6 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
   const [showPafButton, setShowPafButton] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // console.log(addCity, "add city");
 
   const closeModal = () => setIsOpen(false);
   const rowsPerPage = 5;
@@ -42,11 +41,8 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
         }
 
         const data = await response.json();
-        console.log(data.data);
-
         setCountries(data.data || []);
       } catch (err) {
-        console.log("err", err);
 
         setError(err.message);
       }
@@ -142,7 +138,6 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
 
   const handleCountryChange = (e) => {
     const countryId = e.target.value;
-    console.log("Selected Country:", e.target.value);
     setSelectedCountry(countryId);
     fetchCity(countryId);
     resetAddressFields();
@@ -266,7 +261,6 @@ const PAFModal = ({ addCity, setAddCity, NewCity, setNewCity }) => {
                 if (e.target.value == "add-city") {
                   setAddCity(true);
                 }
-                console.log("Selected Country:", e.target.value);
               }}
               className="border-gray-300 rounded py-3 px-2 border shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full"
               disabled={!selectedCountry || loading}

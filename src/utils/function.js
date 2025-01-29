@@ -43,7 +43,6 @@ export const removeCartItemMutation = async (cartId) => {
 
 // Function to update cart item quantity
 export const updateCartQuantityMutation = async (cartId, newQuantity) => {
-    console.log("hit");
     
   try {
     const response = await axios.post(
@@ -56,11 +55,9 @@ export const updateCartQuantityMutation = async (cartId, newQuantity) => {
         },
       }
     );
-    console.log(response,"response kjd vnf");
     
     return response.data;
   } catch (error) {
-    console.log("cathc",error);
 
     throw new Error(error.response?.data?.message || "Error updating cart quantity");
   }

@@ -19,7 +19,6 @@ const PaymentForm = ({
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // console.log(cartItems);
     const {refetch, setRefetch} = useAppContext()
 
   const generateSessionId = () => {
@@ -96,7 +95,6 @@ const PaymentForm = ({
       );
 
       const { clientSecret } = createIntentResponse.data;
-      console.log(reference_no, "reference_no");
 
       const { error: confirmError, paymentIntent } =
         await stripe.confirmCardPayment(clientSecret, {
@@ -138,7 +136,6 @@ const PaymentForm = ({
             }
           }
         );
-        console.log(donationResponse, "donationResponse");
         onPaymentSuccess(paymentIntent);
         setIsSuccess(true);
         setCurrentStep(4);
@@ -189,7 +186,6 @@ const PaymentForm = ({
   };
 
   useEffect(() => {
-    // console.log("PaymentForm mounted");
 
     fetchCart();
   }, [refetch]);

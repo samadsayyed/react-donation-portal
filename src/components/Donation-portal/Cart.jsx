@@ -68,12 +68,10 @@ const CartData = () => {
     const newVisibility = !isCartVisible;
     setIsCartVisible(newVisibility);
     if (newVisibility) {
-      console.log("Opening cart...", newVisibility);
       fetchCart();
     }
   };
   const removeCartItem = async (cartId) => {
-    console.log("Removing item with ID:", cartId);
     try {
       const response = await fetch(`${apiUrl}cart/delete`, {
         method: "POST",

@@ -74,8 +74,6 @@ const Wizard = () => {
     },
   ];
 
-  console.log(currentStep, "currentStep");
-  
 
   const topScroll = () => {
     window.scrollTo({

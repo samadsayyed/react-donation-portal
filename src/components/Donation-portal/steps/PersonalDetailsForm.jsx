@@ -50,7 +50,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
   const handlePaymentSelection = (event) => {
     const selectedPayment = event.target.id;
-    console.log("Payment method selected:", selectedPayment);
     setFormData((prev) => ({
       ...prev,
       paywith: selectedPayment,
@@ -144,7 +143,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     } catch (error) {
       console.error("Error parsing contact preferences:", error);
     }
-    console.log(giftaidValue,"giftaidValue");
     
     // Create and populate FormData
     const form_Data = new FormData();
@@ -171,7 +169,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
         }
       );
 
-      console.log("Transaction created successfully:", response.data);
       setIsSuccess(response.data.success);
       return response.data;
     } catch (error) {
@@ -184,7 +181,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const buyFunction = async () => {
     try {
       const response = await axios.post("http://localhost:3000/payment", {});
-      console.log(response, "response");
 
       if (response.status === 200) {
         window.location.href = response.data.url;
@@ -218,7 +214,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     try {
       const refId = await updateReferenceId();
 
-      console.log(refId, "refId");
 
       await updateTransaction(refId, updatedFormData);
       // await buyFunction();
